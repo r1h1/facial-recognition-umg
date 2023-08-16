@@ -10,6 +10,6 @@ module.exports = {
         host: process.env.mysql_host || 'localhost',
         user: process.env.mysql_user || 'root',
         password: process.env.mysql_password || '',
-        database: process.env.mysql_db || 'bakerygo',
+        database: process.env.mysql_db || 'valles_smp_residencial',
     }
 }

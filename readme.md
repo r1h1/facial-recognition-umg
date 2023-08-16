@@ -12,6 +12,7 @@
 ## Authors
 
 - [Daniel Rivas](https://www.github.com/r1h1)
+- [Auler J Bailey (Inspiración Modelo Python)](https://github.com/avmmodules/facial_recognition)
 
 
 ## Elaborado para

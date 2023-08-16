@@ -1,6 +1,6 @@
-CREATE DATABASE bakerygo;
+CREATE DATABASE valles_smp_residencial;
 
-USE bakerygo;
+USE valles_smp_residencial;
 
 -- CREACION DE TABLA ROL
 CREATE TABLE rol (
@@ -23,6 +23,10 @@ INSERT INTO
 VALUES
     (3, 'Residente');
 
+INSERT INTO
+    `rol`(`id`, `name`)
+VALUES
+    (4, 'Seguridad');
 
 -- CREACION DE TABLA MÓDULOS
 CREATE TABLE modules (
@@ -43,130 +47,6 @@ VALUES
         '<li class="activo shadow mt-2"><a href="../dashboard/component" class="text-decoration-none px-3 py-2 d-block"><i class="fa-solid fa-gauge me-3"></i> Dashboard</a></li>',
         1
     );
-
-INSERT INTO
-    `modules`(`id`, `name`, `route`, `idrol`)
-VALUES
-    (
-        2,
-        'Administracion',
-        '<li class="mt-2"><a href="../administrative/component" class="text-decoration-none px-3 py-2 d-block"><i class="fa-solid fa-lock me-3"></i> Administrativo</a></li>',
-        1
-    );
-
-INSERT INTO
-    `modules`(`id`, `name`, `route`, `idrol`)
-VALUES
-    (
-        3,
-        'Productos',
-        '<li class="mt-2"><a href="../products/component" class="text-decoration-none px-3 py-2 d-block"><i class="fa-solid fa-box me-3"></i> Productos</a></li>',
-        1
-    );
-
-INSERT INTO
-    `modules`(`id`, `name`, `route`, `idrol`)
-VALUES
-    (
-        4,
-        'Pedidos',
-        '<li class="mt-2"><a href="../orders/component" class="text-decoration-none px-3 py-2 d-block"><i class="fa-solid fa-truck me-3"></i> Pedidos</a></li>',
-        1
-    );
-
-INSERT INTO
-    `modules`(`id`, `name`, `route`, `idrol`)
-VALUES
-    (
-        5,
-        'Reporteria',
-        '<li class="mt-2"><a href="../reports/component" class="text-decoration-none px-3 py-2 d-block"><i class="fa-solid fa-chart-pie me-3"></i> Reportería</a></li>',
-        1
-    );
-
--- MODULOS PARA ROL ADMINISTRADOR
-INSERT INTO
-    `modules`(`id`, `name`, `route`, `idrol`)
-VALUES
-    (
-        6,
-        'Dashboard',
-        '<li class="activo shadow mt-2"><a href="../dashboard/component" class="text-decoration-none px-3 py-2 d-block"><i class="fa-solid fa-gauge me-3"></i> Dashboard</a></li>',
-        2
-    );
-
-INSERT INTO
-    `modules`(`id`, `name`, `route`, `idrol`)
-VALUES
-    (
-        7,
-        'Administracion',
-        '<li class="mt-2"><a href="../administrative/component" class="text-decoration-none px-3 py-2 d-block"><i class="fa-solid fa-lock me-3"></i> Administrativo</a></li>',
-        2
-    );
-
-INSERT INTO
-    `modules`(`id`, `name`, `route`, `idrol`)
-VALUES
-    (
-        8,
-        'Productos',
-        '<li class="mt-2"><a href="../products/component" class="text-decoration-none px-3 py-2 d-block"><i class="fa-solid fa-box me-3"></i> Productos</a></li>',
-        2
-    );
-
-INSERT INTO
-    `modules`(`id`, `name`, `route`, `idrol`)
-VALUES
-    (
-        9,
-        'Pedidos',
-        '<li class="mt-2"><a href="../orders/component" class="text-decoration-none px-3 py-2 d-block"><i class="fa-solid fa-truck me-3"></i> Pedidos</a></li>',
-        2
-    );
-
--- MODULOS PARA ROL COCINERO
-INSERT INTO
-    `modules`(`id`, `name`, `route`, `idrol`)
-VALUES
-    (
-        10,
-        'Productos',
-        '<li class="mt-2"><a href="../products/component" class="text-decoration-none px-3 py-2 d-block"><i class="fa-solid fa-box me-3"></i> Productos</a></li>',
-        4
-    );
-
-INSERT INTO
-    `modules`(`id`, `name`, `route`, `idrol`)
-VALUES
-    (
-        11,
-        'Pedidos',
-        '<li class="mt-2"><a href="../orders/component" class="text-decoration-none px-3 py-2 d-block"><i class="fa-solid fa-truck me-3"></i> Pedidos</a></li>',
-        4
-    );
-
--- MODULO PARA ROL CONTABILIDAD
-INSERT INTO
-    `modules`(`id`, `name`, `route`, `idrol`)
-VALUES
-    (
-        12,
-        'Dashboard',
-        '<li class="activo shadow mt-2"><a href="../dashboard/component" class="text-decoration-none px-3 py-2 d-block"><i class="fa-solid fa-gauge me-3"></i> Dashboard</a></li>',
-        5
-    );
-
-INSERT INTO
-    `modules`(`id`, `name`, `route`, `idrol`)
-VALUES
-    (
-        13,
-        'Reporteria',
-        '<li class="mt-2"><a href="../reports/component" class="text-decoration-none px-3 py-2 d-block"><i class="fa-solid fa-chart-pie me-3"></i> Reportería</a></li>',
-        5
-    );
-
 
 -- CREACION DE TABLA USUARIO
 CREATE TABLE users (
@@ -197,7 +77,6 @@ CREATE TABLE entrys_and_exits (
     iduser INT,
     dateandhourentry VARCHAR(50),
     dateandhourexit VARCHAR(50),
-    dateandhourentry VARCHAR(50),
     FOREIGN KEY (iduser) REFERENCES users(id)
 );
 
