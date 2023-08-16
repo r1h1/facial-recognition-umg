@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../../assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="../../assets/css/dataTables.bootstrap5.min.css" />
+    <link rel="stylesheet" href="../../assets/css/style.css" />
+    <link rel="icon" href="../../assets/img/logo.png">
+    <title>Valles de San Miguel Petapa</title>
+</head>
+
+<body>
+    <!-- top navigation bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar"
+                aria-controls="offcanvasExample">
+                <span class="navbar-toggler-icon" data-bs-target="#sidebar"></span>
+            </button>
+            <a class="navbar-brand me-auto ms-lg-0 ms-3 text-uppercase fw-bold">Control Valles SMP</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topNavBar"
+                aria-controls="topNavBar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="topNavBar">
+                <form class="d-flex ms-auto my-3 my-lg-0">
+                    <!-- NOTHING -->
+                </form>
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle ms-2" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <i class="bi bi-person-fill"></i><span class="ms-3">Pablo López</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#">Mi Cuenta</a></li>
+                            <li>
+                                <a class="dropdown-item" href="#">Cerrar Sesión</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- top navigation bar -->
+    <!-- offcanvas -->
+    <div class="offcanvas offcanvas-start sidebar-nav bg-dark" tabindex="-1" id="sidebar">
+        <div class="offcanvas-body p-0">
+            <nav class="navbar-dark">
+                <ul class="navbar-nav">
+                    <li class="mt-5">
+                        <div class="text-muted small fw-bold text-uppercase px-3 mb-3">
+                            Menú de Opciones
+                        </div>
+                    </li>
+                    <li class="my-2">
+                        <hr class="dropdown-divider bg-light" />
+                    </li>
+                    <li>
+                        <a href="dashboard" class="nav-link px-3">
+                            <span class="me-2"><i class="bi bi-speedometer"></i></span>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="residents" class="nav-link px-3">
+                            <span class="me-2"><i class="bi bi-people-fill"></i></span>
+                            <span>Mantenimiento Residentes</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="visitors" class="nav-link px-3">
+                            <span class="me-2"><i class="bi bi-person-bounding-box"></i></span>
+                            <span>Crear Visitantes</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="auth_visitors" class="nav-link px-3">
+                            <span class="me-2"><i class="bi bi-shield-shaded"></i></span>
+                            <span>Ingreso de Visitas</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <!-- offcanvas -->
+    <main class="mt-5 pt-3">
+        <div class="container-fluid p-5">
+            <div class="row">
+                <div class="col-md-12">
+                    <h4>Bienvenido a tu panel</h4>
+                    <p>Es un gusto que estés aquí de nuevo</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <div class="card bg-primary text-white h-100">
+                        <div class="card-body py-5">
+                            <p class="h5">Residentes Registrados</p>
+                            <p class="h1">987</p>
+                        </div>
+                        <div class="card-footer d-flex">
+                            <span class="ms-auto">
+                                <i class="bi bi-chevron-right"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="card bg-warning text-black h-100">
+                        <div class="card-body py-5">
+                            <p class="h5">Visitantes Registrados</p>
+                            <p class="h1">100</p>
+                        </div>
+                        <div class="card-footer d-flex">
+                            <span class="ms-auto">
+                                <i class="bi bi-chevron-right"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 mb-3">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <span class="me-2"><i class="bi bi-bar-chart-fill"></i></span>
+                            Flujo de Ingresos
+                        </div>
+                        <div class="card-body">
+                            <canvas class="chart" width="400" height="200"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card bg-success text-white h-100">
+                        <div class="card-body py-5">
+                            <p class="h5">Ingreso de Visitas</p>
+                            <p class="h1">20</p>
+                        </div>
+                        <div class="card-footer d-flex">
+                            <span class="ms-auto">
+                                <i class="bi bi-chevron-right"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card bg-success text-white h-100">
+                        <div class="card-body py-5">
+                            <p class="h5">Ingreso de Residentes</p>
+                            <p class="h1">20</p>
+                        </div>
+                        <div class="card-footer d-flex">
+                            <span class="ms-auto">
+                                <i class="bi bi-chevron-right"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row text-center">
+                <div class="col-md-12 mt-5">
+                    <p>&copy; Universidad Mariano Gálvez de Guatemala, Pablo Andrés López Paz, 2023</p>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="../../assets/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.2/dist/chart.min.js"></script>
+    <script src="../../assets/js/jquery-3.5.1.js"></script>
+    <script src="../../assets/js/jquery.dataTables.min.js"></script>
+    <script src="../../assets/js/dataTables.bootstrap5.min.js"></script>
+    <script src="../../assets/js/script.js"></script>
+</body>
+
+</html>

@@ -1,4 +1,4 @@
-const dataTable = 'banks';
+const dataTable = 'users';
 
 module.exports = function (dbInjected) {
 
