@@ -1,4 +1,4 @@
-const dataTable = 'users';
+const dataTable = 'modules';
 
 module.exports = function (dbInjected) {
 
@@ -16,18 +16,8 @@ module.exports = function (dbInjected) {
         return db.oneData(dataTable, id);
     }
 
-    const addData = (body) => {
-        return db.addData(dataTable, body);
-    }
-
-    const deleteData = (body) => {
-        return db.deleteData(dataTable, body);
-    }
-
     return {
         data,
-        oneData,
-        deleteData,
-        addData
+        oneData
     }
 }

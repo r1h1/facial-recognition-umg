@@ -3,7 +3,10 @@ const express = require('express');
 var cors = require('cors');
 const config = require('./config');
 const auth = require('./modules/auth/routes.js');
-const banks = require('./modules/banks/routes.js');
+const users = require('./modules/users/routes.js');
+const modules = require('./modules/modules/routes.js');
+const visitors = require('./modules/visitors/routes.js');
+const entrysAndExits = require('./modules/entrysAndExits/routes.js');
 const morgan = require('morgan');
 const { error } = require('./network/responses');
 const errors = require('./network/errors');
@@ -18,7 +21,10 @@ app.use(cors());
 //ROUTERS
 app.set('port', config.app.port);
 app.use('/api/v1/auth', auth);
-app.use('/api/v1/banks', banks);
+app.use('/api/v1/users', users);
+app.use('/api/v1/entrysAndExits', entrysAndExits);
+app.use('/api/v1/visitors', visitors);
+app.use('/api/v1/modules', modules);
 
 app.use(errors);
 
