@@ -44,11 +44,43 @@ const setUserInfo = () => {
 setUserInfo();
 
 
+//RANDOM NUMBER GENERATOR FUNCTION
+const randomNumberGenerator = () => {
+
+    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    const charactersLength = characters.length;
+    let result = "";
+
+    for (let i = 0; i < 7; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+}
+
+
+//ACCESS CODE GENERATOR
+const accessNumberGenerated = () => {
+    document.getElementById("accessCode").value = 'AV' + randomNumberGenerator();
+}
+accessNumberGenerated();
+
+
+//GER DATE
+const getDate = new Date();
+const year = getDate.getFullYear();
+const month = (getDate.getMonth() + 1) < 10 ? '0' + (getDate.getMonth() + 1) : (getDate.getMonth() + 1);
+const day = getDate.getDate() < 10 ? '0' + getDate.getDate() : getDate.getDate();
+
+
+//GET USER LOGGUED INFO
+let userInformation = atob(sessionStorage.getItem('sessionInfo'));
+userInformation = JSON.parse(userInformation);
+
+
+
 //OBTAIN MENU FOR USER ROL ID
 const getModulesPerRol = () => {
 
-    let userInformation = atob(sessionStorage.getItem('sessionInfo'));
-    userInformation = JSON.parse(userInformation);
     let rol = userInformation[0].idrol;
 
     let myHeaders = new Headers();
@@ -85,7 +117,7 @@ getModulesPerRol();
 
 
 //GET RESIDENTS
-const getResidents = () => {
+const getVisitors = () => {
 
     let myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -97,26 +129,27 @@ const getResidents = () => {
         redirect: 'follow'
     };
 
-    fetch(apiRouteResidents, requestOptions)
+    fetch(apiRouteVisitors, requestOptions)
         .then(response => response.json())
         .then(dataObtained => showData(dataObtained))
         .catch(error => console.log('Error: ' + error))
 
     const showData = (dataObtained) => {
         try {
-            addDataToResidentTable(dataObtained);
+            addDataToVisitorTable(dataObtained);
         }
         catch (err) {
             console.log(err);
         }
     }
 }
-getResidents();
+getVisitors();
 
 
 
 //PRINT RESIDENTS
-const addDataToResidentTable = (dataObtained) => {
+const addDataToVisitorTable = (dataObtained) => {
+
     let dataSet = [];
 
     if (dataObtained.body === 'invalid token') {
@@ -131,36 +164,39 @@ const addDataToResidentTable = (dataObtained) => {
     else {
         for (let i = 0; i < dataObtained.body.length; i++) {
             dataSet.push([
+                dataObtained.body[i].accesscode ?? 'Sin Datos',
                 dataObtained.body[i].fullname ?? 'Sin Datos',
-                dataObtained.body[i].address ?? 'Sin Datos',
-                dataObtained.body[i].phonenumber ?? 'Sin Datos',
-                dataObtained.body[i].email ?? 'Sin Datos',
+                dataObtained.body[i].addresstovisit ?? 'Sin Datos',
                 dataObtained.body[i].cui ?? 'Sin Datos',
+                dataObtained.body[i].gender === 1 ? 'Hombre' : 'Mujer' ?? 'Sin Datos',
+                dataObtained.body[i].tipeofvisit ?? 'Sin Datos',
                 dataObtained.body[i].housenumber ?? 'Sin Datos',
-                dataObtained.body[i].idrol === 1 ? 'Super Administrador' : dataObtained.body[i].idrol === 2 ? 'Administrador' : dataObtained.body[i].idrol === 3 ? 'Residente' : dataObtained.body[i].idrol === 4 ? 'Seguridad' : 'Desconocido' ?? 'Sin Datos',
-                dataObtained.body[i].status === 1 ? 'Activo' : 'Inactivo' ?? 'Sin Datos',
-                dataObtained.body[i].gender === 1 ? 'Hombre' : 'Mujer',
-                `<button class="btn btn-warning" onclick="setInfoResident(${dataObtained.body[i].id}, '${dataObtained.body[i].fullname}', '${dataObtained.body[i].address}',
-                 ${dataObtained.body[i].phonenumber},
-                 '${dataObtained.body[i].email}', ${dataObtained.body[i].cui}, '${dataObtained.body[i].housenumber}', ${dataObtained.body[i].idrol},
-                 ${dataObtained.body[i].status}, ${dataObtained.body[i].gender})"><i class="bi bi-pencil-square"></i></button>`,
-                `<button class="btn btn-danger" onclick="deleteResident(${dataObtained.body[i].id})"><i class="bi bi-trash-fill"></i></button>`
+                `<img src="${dataObtained.body[i].personalidentificationphoto}" alt="visitor-photo-identification" width="200"/>`,
+                `<img src="${dataObtained.body[i].visitorphoto}" alt="visitor-photo-face" width="200"/>`,
+                dataObtained.body[i].createddate ?? 'Sin Datos',
+                dataObtained.body[i].expireddate ?? 'Sin Datos',
+                dataObtained.body[i].usergeneratedinvitation ?? 'Sin Datos',
+                dataObtained.body[i].authorization === 1 ? 'Acceso Concedido' : dataObtained.body[i].authorization === 2 ? 'Pendiente Acceso' : 'Acceso Denegado' ?? 'Sin Datos',
+                `<button class="btn btn-danger" onclick="deleteVisitor(${dataObtained.body[i].id})"><i class="bi bi-trash-fill"></i></button>`
             ]);
         }
     }
 
-    new DataTable('#residentsTable', {
+    new DataTable('#visitorsTable', {
         columns: [
+            { title: 'Código Acceso' },
             { title: 'Nombre Completo' },
             { title: 'Dirección' },
-            { title: 'No. Teléfono' },
-            { title: 'Correo Electronico' },
             { title: 'CUI / NIT / Pasaporte' },
-            { title: 'No. Casa' },
-            { title: 'Rol' },
-            { title: 'Estado' },
             { title: 'Genero' },
-            { title: 'Edicion' },
+            { title: 'Tipo de Ingreso' },
+            { title: 'No. de Casa' },
+            { title: 'Foto Indetificacion' },
+            { title: 'Foto Rostro' },
+            { title: 'Fecha Creación' },
+            { title: 'Fecha Expiración' },
+            { title: 'Usuario Genera Autorización' },
+            { title: 'Estado' },
             { title: 'Eliminación' }
         ],
         data: dataSet,
@@ -189,22 +225,90 @@ const addDataToResidentTable = (dataObtained) => {
 }
 
 
+//CONVERT PHOTO FACE TO BASE 64
+const convertPhotoFaceToBase64 = () => {
+
+    const photoFaceVisitor = document.getElementById('photoFaceVisitor');
+
+    photoFaceVisitor.addEventListener("change", e => {
+        const file = photoFaceVisitor.files[0];
+        const reader = new FileReader();
+
+        reader.addEventListener("load", () => {
+            let imageRoute = reader.result;
+            let sizeImage = file.size;
+
+            if (sizeImage > 70000) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Advertencia',
+                    text: 'La imagen supera el peso permitido, comprimala con la herramienta que se muestra abajo, intente de nuevo o seleccione otra imagen para continuar (MAX 70 KB)',
+                    footer: '<a href="https://tinyjpg.com/" target="_blank">Presione acá para ser redirigido al compresor de imágenes</a>',
+                    confirmButtonText: 'Entendido'
+                });
+                document.getElementById('photoFaceBase64').value = '';
+                document.getElementById('photoFaceVisitor').value = '';
+            }
+            else {
+                document.getElementById('photoFaceBase64').value = imageRoute;
+            }
+        });
+        reader.readAsDataURL(file);
+    });
+}
+convertPhotoFaceToBase64();
+
+
+//CONVERT PHOTO ID TO BASE 64
+const convertPhotoIdToBase64 = () => {
+
+    const photoIdVisitor = document.getElementById('photoIdVisitor');
+
+    photoIdVisitor.addEventListener("change", e => {
+        const file = photoIdVisitor.files[0];
+        const reader = new FileReader();
+
+        reader.addEventListener("load", () => {
+            let imageRoute = reader.result;
+            let sizeImage = file.size;
+
+            if (sizeImage > 70000) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Advertencia',
+                    text: 'La imagen supera el peso permitido, comprimala con la herramienta que se muestra abajo, intente de nuevo o seleccione otra imagen para continuar (MAX 70 KB)',
+                    footer: '<a href="https://tinyjpg.com/" target="_blank">Presione acá para ser redirigido al compresor de imágenes</a>',
+                    confirmButtonText: 'Entendido'
+                });
+                document.getElementById('photoIdBase64').value = '';
+                document.getElementById('photoIdVisitor').value = '';
+            }
+            else {
+                document.getElementById('photoIdBase64').value = imageRoute;
+            }
+        });
+        reader.readAsDataURL(file);
+    });
+}
+convertPhotoIdToBase64();
+
+
 //CREATE RESIDENTS
-const createResidents = () => {
+const createVisitors = () => {
 
-    let nameResident = document.getElementById('nameResident').value;
-    let addressResident = document.getElementById('addressResident').value;
-    let phoneResident = document.getElementById('phoneResident').value;
-    let emailResident = document.getElementById('emailResident').value;
-    let cuiResident = document.getElementById('cuiResident').value;
-    let houseNumberResident = document.getElementById('houseNumberResident').value;
-    let genderResident = document.getElementById('genderResident').value;
-    let rolResident = document.getElementById('rolResident').value;
-    let passwordResident = document.getElementById('passwordResident').value;
+    let accessCode = document.getElementById('accessCode').value;
+    let nameVisitor = document.getElementById('nameVisitor').value;
+    let addressVisitor = document.getElementById('addressVisitor').value;
+    let cuiVisitor = document.getElementById('cuiVisitor').value;
+    let houseNumberVisitor = document.getElementById('houseNumberVisitor').value;
+    let genderVisitor = document.getElementById('genderVisitor').value;
+    let photoFaceVisitor = document.getElementById('photoFaceBase64').value;
+    let photoIdVisitor = document.getElementById('photoIdBase64').value;
+    let entryTypeVisitor = document.getElementById('entryTypeVisitor').value;
 
-    if (nameResident === '' || addressResident === '' || phoneResident === '' || emailResident === '' ||
-        cuiResident === '' || houseNumberResident === '' || photoResident === '' || genderResident === '' ||
-        rolResident === '' || passwordResident === '') {
+    if (nameVisitor === '' || addressVisitor === '' || cuiVisitor === '' || houseNumberVisitor === ''
+        || photoFaceVisitor === '' || photoIdVisitor === '' || genderVisitor === '' ||
+        entryTypeVisitor === '') {
         Swal.fire({
             icon: 'warning',
             title: 'Advertencia',
@@ -221,18 +325,19 @@ const createResidents = () => {
 
         var raw = JSON.stringify({
             "id": 0,
-            "fullname": nameResident,
-            "address": addressResident,
-            "phonenumber": phoneResident,
-            "email": emailResident,
-            "cui": cuiResident,
-            "housenumber": houseNumberResident,
-            "idrol": rolResident,
-            "status": 1,
-            "gender": genderResident,
-            "photo": '',
-            "user": emailResident,
-            "password": passwordResident
+            "accesscode": accessCode,
+            "fullname": nameVisitor,
+            "addresstovisit": addressVisitor,
+            "cui": cuiVisitor,
+            "gender": genderVisitor,
+            "tipeofvisit": entryTypeVisitor,
+            "housenumber": houseNumberVisitor,
+            "personalidentificationphoto": photoFaceVisitor,
+            "visitorphoto": photoIdVisitor,
+            "createddate": year + '-' + month + '-' + day,
+            "expireddate": year + '-' + month + '-' + day,
+            "usergeneratedinvitation": userInformation[0].id,
+            "authorization": 2
         });
 
         var requestOptions = {
@@ -242,7 +347,7 @@ const createResidents = () => {
             redirect: 'follow'
         };
 
-        fetch(apiRouteResidents, requestOptions)
+        fetch(apiRouteVisitors, requestOptions)
             .then(response => response.json())
             .then(dataObtained => showData(dataObtained))
             .catch(error => err = error);
@@ -270,9 +375,9 @@ const createResidents = () => {
                             confirmButtonText: 'Entendido',
                         }).then((result) => {
                             if (result.isConfirmed) {
-                                window.location.href = '../../views/a/residents'
+                                window.location.href = '../../views/a/visitors'
                             } else if (result.isDenied) {
-                                window.location.href = '../../views/a/residents'
+                                window.location.href = '../../views/a/visitors'
                             }
                         });
                     }
@@ -299,136 +404,9 @@ const createResidents = () => {
         }
     }
 }
-
-
-//SET DATA TO EDIT
-const setInfoResident = (id, fullname, address, phonenumber, email, cui, housenumber, idrol, status, gender) => {
-
-    $('#editModal').modal('show');
-
-    document.getElementById('idToEdit').value = id;
-    document.getElementById('nameResidentEdit').value = fullname;
-    document.getElementById('addressResidentEdit').value = address;
-    document.getElementById('phoneResidentEdit').value = phonenumber;
-    document.getElementById('emailResidentEdit').value = email;
-    document.getElementById('cuiResidentEdit').value = cui;
-    document.getElementById('houseNumberResidentEdit').value = housenumber;
-    document.getElementById('genderResidentEdit').selectedIndex = gender;
-    document.getElementById('rolResidentEdit').selectedIndex = idrol - 1;
-    document.getElementById('statusResidentEdit').selectedIndex = status;
-}
-
-
-//EDIT RESIDENTS
-const updateResident = () => {
-
-    let idToEdit = document.getElementById('idToEdit').value;
-    let nameResident = document.getElementById('nameResidentEdit').value;
-    let addressResident = document.getElementById('addressResidentEdit').value;
-    let phoneResident = document.getElementById('phoneResidentEdit').value;
-    let emailResident = document.getElementById('emailResidentEdit').value;
-    let cuiResident = document.getElementById('cuiResidentEdit').value;
-    let houseNumberResident = document.getElementById('houseNumberResidentEdit').value;
-    let genderResident = document.getElementById('genderResidentEdit').value;
-    let rolResident = document.getElementById('rolResidentEdit').value;
-
-    if (idToEdit === '' || nameResident === '' || addressResident === '' || phoneResident === '' || emailResident === '' ||
-        cuiResident === '' || houseNumberResident === '' || photoResident === '' || genderResident === '' ||
-        rolResident === '' || passwordResident === '') {
-        Swal.fire({
-            icon: 'warning',
-            title: 'Advertencia',
-            text: 'Debes llenar todos los datos obligatorios y presiona los términos y condiciones',
-            footer: 'Si el problema persiste, por favor comunicarse con el administrador o enviar un mensaje usando la opción de soporte indicando el error.',
-            confirmButtonText: 'Entendido'
-        });
-    }
-    else {
-        let myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
-        myHeaders.append("Authorization", "Bearer " + sessionStorage.getItem('signInToken'));
-
-        var raw = JSON.stringify({
-            "id": idToEdit,
-            "fullname": nameResident,
-            "address": addressResident,
-            "phonenumber": phoneResident,
-            "email": emailResident,
-            "cui": cuiResident,
-            "housenumber": houseNumberResident,
-            "idrol": rolResident,
-            "status": 1,
-            "gender": genderResident
-        });
-
-        var requestOptions = {
-            method: 'POST',
-            headers: myHeaders,
-            body: raw,
-            redirect: 'follow'
-        };
-
-        fetch(apiRouteResidents, requestOptions)
-            .then(response => response.json())
-            .then(dataObtained => showData(dataObtained))
-            .catch(error => err = error);
-
-        const showData = (dataObtained) => {
-            if (dataObtained.body === 'Error de Servidor') {
-                Swal.fire({
-                    icon: 'error',
-                    title: '¡Lo Sentimos!',
-                    text: 'No se pudo concretar la operación, intenta de nuevo',
-                    footer: 'Si el problema persiste, por favor comunicarse con el administrador o enviar un mensaje usando la opción de soporte indicando el error.',
-                    confirmButtonText: 'Entendido'
-                });
-            }
-            else {
-                if (dataObtained.status === 200 || dataObtained.status === 201 || dataObtained.status === 304) {
-                    try {
-                        Swal.fire({
-                            icon: 'success',
-                            title: '¡Correcto!',
-                            text: 'La operación se completó con éxito',
-                            footer: '',
-                            showDenyButton: false,
-                            showCancelButton: false,
-                            confirmButtonText: 'Entendido',
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                window.location.href = '../../views/a/residents'
-                            } else if (result.isDenied) {
-                                window.location.href = '../../views/a/residents'
-                            }
-                        });
-                    }
-                    catch (err) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: '¡Lo Sentimos!',
-                            text: 'Sa ha generado un error interno',
-                            footer: 'Si el problema persiste, por favor comunicarse con el administrador o enviar un mensaje usando la opción de soporte indicando el error.',
-                            confirmButtonText: 'Entendido'
-                        });
-                    }
-                }
-                else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: '¡Lo Sentimos!',
-                        text: 'Sa ha generado un error interno',
-                        footer: 'Si el problema persiste, por favor comunicarse con el administrador o enviar un mensaje usando la opción de soporte indicando el error.',
-                        confirmButtonText: 'Entendido'
-                    });
-                }
-            }
-        }
-    }
-}
-
 
 //DELETE RESIDENTS
-const deleteResident = (idUserToEliminate) => {
+const deleteVisitor = (idUserToEliminate) => {
     Swal.fire({
         icon: 'info',
         title: '¿Seguro?',
@@ -454,7 +432,7 @@ const deleteResident = (idUserToEliminate) => {
                 redirect: 'follow'
             };
 
-            fetch(apiRouteResidents, requestOptions)
+            fetch(apiRouteVisitors, requestOptions)
                 .then(response => response.json())
                 .then(dataObtained => showData(dataObtained))
                 .catch(error => console.log('Error: ' + error))
@@ -482,9 +460,9 @@ const deleteResident = (idUserToEliminate) => {
                                 confirmButtonText: 'Entendido',
                             }).then((result) => {
                                 if (result.isConfirmed) {
-                                    window.location.href = '../../views/a/residents';
+                                    window.location.href = '../../views/a/visitors';
                                 } else if (result.isDenied) {
-                                    window.location.href = '../../views/a/residents';
+                                    window.location.href = '../../views/a/visitors';
                                 }
                             })
                         }

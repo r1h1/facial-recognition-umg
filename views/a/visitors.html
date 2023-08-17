@@ -36,12 +36,11 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle ms-2" role="button" data-bs-toggle="dropdown"
                             aria-expanded="false">
-                            <i class="bi bi-person-fill"></i><span class="ms-3">Pablo López</span>
+                            <i class="bi bi-person-fill"></i><span class="ms-3" id="userNameDisplay">{user}</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#">Mi Cuenta</a></li>
-                            <li>
-                                <a class="dropdown-item" href="#">Cerrar Sesión</a>
+                            <li onclick="closeSession()">
+                                <a class="dropdown-item">Cerrar Sesión</a>
                             </li>
                         </ul>
                     </li>
@@ -63,36 +62,9 @@
                     <li class="my-2">
                         <hr class="dropdown-divider bg-light" />
                     </li>
-                    <li>
-                        <a href="dashboard" class="nav-link px-3">
-                            <span class="me-2"><i class="bi bi-speedometer"></i></span>
-                            <span>Dashboard</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="residents" class="nav-link px-3">
-                            <span class="me-2"><i class="bi bi-people-fill"></i></span>
-                            <span>Mantenimiento Residentes</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="visitors" class="nav-link px-3">
-                            <span class="me-2"><i class="bi bi-person-bounding-box"></i></span>
-                            <span>Crear Visitantes</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="auth_visitors" class="nav-link px-3">
-                            <span class="me-2"><i class="bi bi-shield-shaded"></i></span>
-                            <span>Ingreso de Visitas</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="reports" class="nav-link px-3">
-                            <span class="me-2"><i class="bi bi-file-earmark-bar-graph-fill"></i></span>
-                            <span>Reportes</span>
-                        </a>
-                    </li>
+                    <div id="menu-list">
+                        <!-- MENU -->
+                    </div>
                 </ul>
             </nav>
         </div>
@@ -113,36 +85,48 @@
                             <div class="row">
                                 <div class="col-lg-6">
                                     <form class="row g-3">
+
+                                        <!-- ACCESS CODE -->
+                                        <input type="text" id="accessCode" hidden>
+
                                         <div class="col-md-12">
                                             <label for="inputEmail4" class="form-label">Nombre Completo *</label>
-                                            <input type="email" class="form-control" id="inputEmail4"
-                                                placeholder="Juan Pérez">
+                                            <input type="text" class="form-control" id="nameVisitor"
+                                                placeholder="Juan Pérez" maxlength="50">
                                         </div>
                                         <div class="col-md-12">
                                             <label for="inputPassword4" class="form-label">Dirección *</label>
-                                            <input type="password" class="form-control" id="inputPassword4"
-                                                placeholder="San Miguel Petapa">
+                                            <input type="text" class="form-control" id="addressVisitor"
+                                                placeholder="San Miguel Petapa" maxlength="200">
                                         </div>
                                         <div class="col-md-6">
                                             <label for="inputCity" class="form-label">CUI / NIT / Pasaporte *</label>
-                                            <input type="text" class="form-control" id="inputCity"
+                                            <input type="number" class="form-control" id="cuiVisitor"
                                                 placeholder="3457777546112">
                                         </div>
                                         <div class="col-md-6">
                                             <label for="inputZip" class="form-label">Número de Casa *</label>
-                                            <input type="text" class="form-control" id="inputZip" placeholder="12-45 C">
+                                            <input type="text" class="form-control" id="houseNumberVisitor"
+                                                placeholder="12-45 C" maxlength="50">
                                         </div>
                                         <div class="col-md-6">
                                             <label for="inputZip" class="form-label">Fotografía Rostro *</label>
-                                            <input class="form-control" type="file" id="formFile">
+                                            <input class="form-control" type="file" id="photoFaceVisitor">
                                         </div>
                                         <div class="col-md-6">
                                             <label for="inputZip" class="form-label">Fotografía Identificación *</label>
-                                            <input class="form-control" type="file" id="formFile">
+                                            <input class="form-control" type="file" id="photoIdVisitor">
                                         </div>
+
+                                        <!-- PHOTO FACE -->
+                                        <input type="text" id="photoFaceBase64" hidden>
+
+                                        <!-- PHOTO ID -->
+                                        <input type="text" id="photoIdBase64" hidden>
+
                                         <div class="col-md-12">
                                             <label for="inputState" class="form-label">Género *</label>
-                                            <select id="inputState" class="form-select">
+                                            <select id="genderVisitor" class="form-select">
                                                 <option value="" selected>Selecciona uno...</option>
                                                 <option value="1">Hombre</option>
                                                 <option value="0">Mujer</option>
@@ -150,12 +134,12 @@
                                         </div>
                                         <div class="col-md-12">
                                             <label for="inputPassword4" class="form-label">Motivo de Ingreso *</label>
-                                            <input type="password" class="form-control" id="inputPassword4"
-                                                placeholder="Visita Familiar">
+                                            <input type="text" class="form-control" id="entryTypeVisitor"
+                                                placeholder="Visita Familiar" maxlength="200">
                                         </div>
                                         <div class="col-12">
                                             <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" id="gridCheck">
+                                                <input class="form-check-input" type="checkbox" id="gridCheck" checked>
                                                 <label class="form-check-label" for="gridCheck">
                                                     Estoy de acuerdo con las normas impuestas para ingresar y el horario
                                                     indicado por el personal de seguridad o posters informativos, además
@@ -164,69 +148,19 @@
                                             </div>
                                         </div>
                                         <div class="col-12">
-                                            <button type="submit" class="btn btn-primary w-100">Guardar</button>
+                                            <button type="button" class="btn btn-primary w-100"
+                                                onclick="createVisitors()">Guardar</button>
                                         </div>
                                     </form>
                                 </div>
+
                                 <div class="col-lg-6">
                                     <div class="table-responsive">
-                                        <table id="example" class="table table-striped data-table" style="width: 100%">
-                                            <thead>
-                                                <tr>
-                                                    <th>Name</th>
-                                                    <th>Position</th>
-                                                    <th>Office</th>
-                                                    <th>Age</th>
-                                                    <th>Start date</th>
-                                                    <th>Salary</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>Tiger Nixon</td>
-                                                    <td>System Architect</td>
-                                                    <td>Edinburgh</td>
-                                                    <td>61</td>
-                                                    <td>2011/04/25</td>
-                                                    <td>$320,800</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Garrett Winters</td>
-                                                    <td>Accountant</td>
-                                                    <td>Tokyo</td>
-                                                    <td>63</td>
-                                                    <td>2011/07/25</td>
-                                                    <td>$170,750</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Ashton Cox</td>
-                                                    <td>Junior Technical Author</td>
-                                                    <td>San Francisco</td>
-                                                    <td>66</td>
-                                                    <td>2009/01/12</td>
-                                                    <td>$86,000</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Cedric Kelly</td>
-                                                    <td>Senior Javascript Developer</td>
-                                                    <td>Edinburgh</td>
-                                                    <td>22</td>
-                                                    <td>2012/03/29</td>
-                                                    <td>$433,060</td>
-                                                </tr>
-                                            <tfoot>
-                                                <tr>
-                                                    <th>Name</th>
-                                                    <th>Position</th>
-                                                    <th>Office</th>
-                                                    <th>Age</th>
-                                                    <th>Start date</th>
-                                                    <th>Salary</th>
-                                                </tr>
-                                            </tfoot>
+                                        <table id="visitorsTable" class="display w-100">
                                         </table>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -243,7 +177,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.2/dist/chart.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-    <script src="../../business/a/residents.js"></script>
+    <script src="../../business/a/visitors.js"></script>
     <script>
         new DataTable('#example');
     </script>
