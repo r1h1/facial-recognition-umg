@@ -140,6 +140,8 @@ const getAllUserData = (id, tokenObtained) => {
                         footer: 'Si el problema persiste, por favor comunicarse con el administrador o enviar un mensaje usando la opción de soporte indicando el error.',
                         confirmButtonText: 'Entendido'
                     });
+                    sessionStorage.removeItem("signInToken");
+                    sessionStorage.removeItem("sessionInfo");
                 }
                 else {
                     let userInformation = window.btoa(JSON.stringify(dataObtained.body));

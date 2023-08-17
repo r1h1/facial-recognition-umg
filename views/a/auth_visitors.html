@@ -7,9 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="../../assets/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" />
-    <link rel="stylesheet" href="../../assets/css/dataTables.bootstrap5.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css" />
     <link rel="stylesheet" href="../../assets/css/style.css" />
     <link rel="icon" href="../../assets/img/logo.png">
+    <!-- SweetAlert2 Library -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>Valles de San Miguel Petapa</title>
 </head>
 
@@ -180,10 +182,12 @@
     </main>
     <script src="../../assets/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.2/dist/chart.min.js"></script>
-    <script src="../../assets/js/jquery-3.5.1.js"></script>
-    <script src="../../assets/js/jquery.dataTables.min.js"></script>
-    <script src="../../assets/js/dataTables.bootstrap5.min.js"></script>
-    <script src="../../assets/js/script.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="../../business/a/residents.js"></script>
+    <script>
+        new DataTable('#example');
+    </script>
 </body>
 
 </html>

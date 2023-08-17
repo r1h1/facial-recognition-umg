@@ -16,8 +16,13 @@ module.exports = function (dbInjected) {
         return db.oneData(dataTable, id);
     }
 
+    const rolData = (idrol) => {
+        return db.rolData(dataTable, idrol);
+    }
+
     return {
         data,
+        rolData,
         oneData
     }
 }

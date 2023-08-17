@@ -65,6 +65,16 @@ const oneData = (table, id) => {
 }
 
 
+//DEVOLVER DATOS DE MODULOS POR ROL ID
+const rolData = (table, idrol) => {
+    return new Promise((resolve, reject) => {
+        stringConnection.query(`SELECT * FROM ${table} WHERE idrol=${idrol}`, (error, result) => {
+            return error ? reject(error) : resolve(result);
+        });
+    });
+}
+
+
 //INSERTAR UN REGISTRO DE LA BASE DE DATOS
 const addData = (table, data) => {
     return new Promise((resolve, reject) => {
@@ -98,5 +108,6 @@ module.exports = {
     oneData,
     addData,
     deleteData,
-    query
+    query,
+    rolData
 }

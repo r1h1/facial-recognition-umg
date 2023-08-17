@@ -7,9 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="../../assets/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" />
-    <link rel="stylesheet" href="../../assets/css/dataTables.bootstrap5.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css" />
     <link rel="stylesheet" href="../../assets/css/style.css" />
     <link rel="icon" href="../../assets/img/logo.png">
+    <!-- SweetAlert2 Library -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>Valles de San Miguel Petapa</title>
 </head>
 
@@ -34,12 +36,11 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle ms-2" role="button" data-bs-toggle="dropdown"
                             aria-expanded="false">
-                            <i class="bi bi-person-fill"></i><span class="ms-3">Pablo López</span>
+                            <i class="bi bi-person-fill"></i><span class="ms-3" id="userNameDisplay">{user}</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#">Mi Cuenta</a></li>
-                            <li>
-                                <a class="dropdown-item" href="#">Cerrar Sesión</a>
+                            <li onclick="closeSession()">
+                                <a class="dropdown-item">Cerrar Sesión</a>
                             </li>
                         </ul>
                     </li>
@@ -61,36 +62,9 @@
                     <li class="my-2">
                         <hr class="dropdown-divider bg-light" />
                     </li>
-                    <li>
-                        <a href="dashboard" class="nav-link px-3">
-                            <span class="me-2"><i class="bi bi-speedometer"></i></span>
-                            <span>Dashboard</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="residents" class="nav-link px-3">
-                            <span class="me-2"><i class="bi bi-people-fill"></i></span>
-                            <span>Mantenimiento Residentes</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="visitors" class="nav-link px-3">
-                            <span class="me-2"><i class="bi bi-person-bounding-box"></i></span>
-                            <span>Crear Visitantes</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="auth_visitors" class="nav-link px-3">
-                            <span class="me-2"><i class="bi bi-shield-shaded"></i></span>
-                            <span>Ingreso de Visitas</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="reports" class="nav-link px-3">
-                            <span class="me-2"><i class="bi bi-file-earmark-bar-graph-fill"></i></span>
-                            <span>Reportes</span>
-                        </a>
-                    </li>
+                    <div id="menu-list">
+                        <!-- MENU -->
+                    </div>
                 </ul>
             </nav>
         </div>
@@ -100,7 +74,7 @@
         <div class="container-fluid p-5">
             <div class="row">
                 <div class="col-md-12">
-                    <h4>Residentes</h4>
+                    <h4>Usuarios y Residentes</h4>
                     <p>Gestiona la información desde este módulo.</p>
                 </div>
             </div>
@@ -113,111 +87,189 @@
                                     <form class="row g-3">
                                         <div class="col-md-12">
                                             <label for="inputEmail4" class="form-label">Nombre Completo *</label>
-                                            <input type="email" class="form-control" id="inputEmail4" placeholder="Juan Pérez">
+                                            <input type="text" class="form-control" id="nameResident"
+                                                placeholder="Juan Pérez" maxlength="50">
                                         </div>
                                         <div class="col-md-12">
                                             <label for="inputPassword4" class="form-label">Dirección *</label>
-                                            <input type="password" class="form-control" id="inputPassword4" placeholder="San Miguel Petapa">
+                                            <input type="text" class="form-control" id="addressResident"
+                                                placeholder="San Miguel Petapa" maxlength="200">
                                         </div>
                                         <div class="col-6">
                                             <label for="inputAddress" class="form-label">Teléfono *</label>
-                                            <input type="text" class="form-control" id="inputAddress"
-                                                placeholder="45674854">
+                                            <input type="number" class="form-control" id="phoneResident"
+                                                placeholder="45674854" min="1" max="9999999999999999999">
                                         </div>
                                         <div class="col-6">
                                             <label for="inputAddress2" class="form-label">Correo Electrónico *</label>
-                                            <input type="text" class="form-control" id="inputAddress2"
-                                                placeholder="ejemplo@gmail.com">
+                                            <input type="text" class="form-control" id="emailResident"
+                                                placeholder="ejemplo@gmail.com" maxlength="40">
                                         </div>
                                         <div class="col-md-6">
                                             <label for="inputCity" class="form-label">CUI / NIT / Pasaporte *</label>
-                                            <input type="text" class="form-control" id="inputCity" placeholder="3457777546112">
+                                            <input type="number" class="form-control" id="cuiResident"
+                                                placeholder="3457777546112" min="1">
                                         </div>
                                         <div class="col-md-6">
                                             <label for="inputZip" class="form-label">Número de Casa *</label>
-                                            <input type="text" class="form-control" id="inputZip" placeholder="12-45 C">
+                                            <input type="text" class="form-control" id="houseNumberResident"
+                                                placeholder="12-45 C" maxlength="50">
                                         </div>
-                                        <div class="col-md-6">
-                                            <label for="inputZip" class="form-label">Fotografía *</label>
-                                            <input class="form-control" type="file" id="formFile">
+                                        <div class="col-md-12">
+                                            <label for="inputZip" class="form-label">Fotografía (Rostro) *</label>
+                                            <input class="form-control" type="file" id="photoResident">
                                         </div>
                                         <div class="col-md-6">
                                             <label for="inputState" class="form-label">Género *</label>
-                                            <select id="inputState" class="form-select">
+                                            <select id="genderResident" class="form-select">
                                                 <option value="" selected>Selecciona uno...</option>
                                                 <option value="1">Hombre</option>
                                                 <option value="0">Mujer</option>
                                             </select>
                                         </div>
+                                        <div class="col-md-6">
+                                            <label for="inputState" class="form-label">Rol *</label>
+                                            <select id="rolResident" class="form-select">
+                                                <option value="" selected>Selecciona uno...</option>
+                                                <option value="2">Administrador</option>
+                                                <option value="3">Residente</option>
+                                                <option value="4">Seguridad</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label for="inputZip" class="form-label">Contraseña *</label>
+                                            <input type="text" class="form-control" id="passwordResident"
+                                                placeholder="Tu contraseña aquí" maxlength="50">
+                                        </div>
                                         <div class="col-12">
                                             <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" id="gridCheck">
+                                                <input class="form-check-input" type="checkbox" id="conditionsCheck"
+                                                    checked>
                                                 <label class="form-check-label" for="gridCheck">
-                                                    Estoy de acuerdo con las normas impuestas para la residencial
+                                                    Estoy de acuerdo con las normas impuestas por la junta
+                                                    administrativa y el residencial así como
+                                                    creación de mi usuario como residente activo registrando mis
+                                                    datos biométricos para otorgarme ingreso teniendo la junta
+                                                    administrativa
+                                                    el derecho de cancelar o inactivar mi usuario si no cumplo con las
+                                                    normas.
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="col-12">
-                                            <button type="submit" class="btn btn-primary w-100">Guardar</button>
+                                            <button type="button" class="btn btn-primary w-100"
+                                                onclick="createResidents()">Guardar</button>
                                         </div>
                                     </form>
                                 </div>
+
+                                <!-- Modal Edición -->
+                                <div class="modal fade" id="editModal" tabindex="-1"
+                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="exampleModalLabel">Edición</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form class="row g-3">
+
+                                                    <!-- ID TO EDIT -->
+                                                    <input type="text" id="idToEdit">
+
+                                                    <div class="col-md-12">
+                                                        <label for="inputEmail4" class="form-label">Nombre Completo
+                                                            *</label>
+                                                        <input type="text" class="form-control" id="nameResidentEdit"
+                                                            placeholder="Juan Pérez" maxlength="50">
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <label for="inputPassword4" class="form-label">Dirección
+                                                            *</label>
+                                                        <input type="text" class="form-control" id="addressResidentEdit"
+                                                            placeholder="San Miguel Petapa" maxlength="200">
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <label for="inputAddress" class="form-label">Teléfono *</label>
+                                                        <input type="number" class="form-control" id="phoneResidentEdit"
+                                                            placeholder="45674854" min="1" max="9999999999999999999">
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <label for="inputAddress2" class="form-label">Correo Electrónico
+                                                            *</label>
+                                                        <input type="text" class="form-control" id="emailResidentEdit"
+                                                            placeholder="ejemplo@gmail.com" maxlength="40">
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="inputCity" class="form-label">CUI / NIT / Pasaporte
+                                                            *</label>
+                                                        <input type="number" class="form-control" id="cuiResidentEdit"
+                                                            placeholder="3457777546112" min="1">
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="inputZip" class="form-label">Número de Casa
+                                                            *</label>
+                                                        <input type="text" class="form-control" id="houseNumberResidentEdit"
+                                                            placeholder="12-45 C" maxlength="50">
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="inputState" class="form-label">Género *</label>
+                                                        <select id="genderResidentEdit" class="form-select">
+                                                            <option value="" selected>Selecciona uno...</option>
+                                                            <option value="1">Hombre</option>
+                                                            <option value="0">Mujer</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="inputState" class="form-label">Rol *</label>
+                                                        <select id="rolResidentEdit" class="form-select">
+                                                            <option value="" selected>Selecciona uno...</option>
+                                                            <option value="2">Administrador</option>
+                                                            <option value="3">Residente</option>
+                                                            <option value="4">Seguridad</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <label for="inputState" class="form-label">Status *</label>
+                                                        <select id="statusResidentEdit" class="form-select">
+                                                            <option value="" selected>Selecciona uno...</option>
+                                                            <option value="1">Activo</option>
+                                                            <option value="0">Inactivo</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                id="conditionsCheck" checked>
+                                                            <label class="form-check-label" for="gridCheck">
+                                                                Estoy de acuerdo con las normas impuestas por la junta
+                                                                administrativa y el residencial así como
+                                                                creación de mi usuario como residente activo registrando
+                                                                mis
+                                                                datos biométricos para otorgarme ingreso teniendo la
+                                                                junta
+                                                                administrativa
+                                                                el derecho de cancelar o inactivar mi usuario si no
+                                                                cumplo con las
+                                                                normas.
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <button type="button" class="btn btn-primary w-100"
+                                                            onclick="updateResident()">Guardar</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="col-lg-6">
                                     <div class="table-responsive">
-                                        <table id="example" class="table table-striped data-table" style="width: 100%">
-                                            <thead>
-                                                <tr>
-                                                    <th>Name</th>
-                                                    <th>Position</th>
-                                                    <th>Office</th>
-                                                    <th>Age</th>
-                                                    <th>Start date</th>
-                                                    <th>Salary</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>Tiger Nixon</td>
-                                                    <td>System Architect</td>
-                                                    <td>Edinburgh</td>
-                                                    <td>61</td>
-                                                    <td>2011/04/25</td>
-                                                    <td>$320,800</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Garrett Winters</td>
-                                                    <td>Accountant</td>
-                                                    <td>Tokyo</td>
-                                                    <td>63</td>
-                                                    <td>2011/07/25</td>
-                                                    <td>$170,750</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Ashton Cox</td>
-                                                    <td>Junior Technical Author</td>
-                                                    <td>San Francisco</td>
-                                                    <td>66</td>
-                                                    <td>2009/01/12</td>
-                                                    <td>$86,000</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Cedric Kelly</td>
-                                                    <td>Senior Javascript Developer</td>
-                                                    <td>Edinburgh</td>
-                                                    <td>22</td>
-                                                    <td>2012/03/29</td>
-                                                    <td>$433,060</td>
-                                                </tr>
-                                            <tfoot>
-                                                <tr>
-                                                    <th>Name</th>
-                                                    <th>Position</th>
-                                                    <th>Office</th>
-                                                    <th>Age</th>
-                                                    <th>Start date</th>
-                                                    <th>Salary</th>
-                                                </tr>
-                                            </tfoot>
+                                        <table id="residentsTable" class="display w-100">
                                         </table>
                                     </div>
                                 </div>
@@ -235,10 +287,12 @@
     </main>
     <script src="../../assets/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.2/dist/chart.min.js"></script>
-    <script src="../../assets/js/jquery-3.5.1.js"></script>
-    <script src="../../assets/js/jquery.dataTables.min.js"></script>
-    <script src="../../assets/js/dataTables.bootstrap5.min.js"></script>
-    <script src="../../assets/js/script.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="../../business/a/residents.js"></script>
+    <script>
+        new DataTable('#example');
+    </script>
 </body>
 
 </html>
