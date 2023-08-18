@@ -36,12 +36,11 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle ms-2" role="button" data-bs-toggle="dropdown"
                             aria-expanded="false">
-                            <i class="bi bi-person-fill"></i><span class="ms-3">Pablo López</span>
+                            <i class="bi bi-person-fill"></i><span class="ms-3" id="userNameDisplay">{user}</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#">Mi Cuenta</a></li>
-                            <li>
-                                <a class="dropdown-item" href="../g/login/component">Cerrar Sesión</a>
+                            <li onclick="closeSession()">
+                                <a class="dropdown-item">Cerrar Sesión</a>
                             </li>
                         </ul>
                     </li>
@@ -63,36 +62,9 @@
                     <li class="my-2">
                         <hr class="dropdown-divider bg-light" />
                     </li>
-                    <li>
-                        <a href="dashboard" class="nav-link px-3">
-                            <span class="me-2"><i class="bi bi-speedometer"></i></span>
-                            <span>Dashboard</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="residents" class="nav-link px-3">
-                            <span class="me-2"><i class="bi bi-people-fill"></i></span>
-                            <span>Mantenimiento Residentes</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="visitors" class="nav-link px-3">
-                            <span class="me-2"><i class="bi bi-person-bounding-box"></i></span>
-                            <span>Crear Visitantes</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="auth_visitors" class="nav-link px-3">
-                            <span class="me-2"><i class="bi bi-shield-shaded"></i></span>
-                            <span>Ingreso de Visitas</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="reports" class="nav-link px-3">
-                            <span class="me-2"><i class="bi bi-file-earmark-bar-graph-fill"></i></span>
-                            <span>Reportes</span>
-                        </a>
-                    </li>
+                    <div id="menu-list">
+                        <!-- MENU -->
+                    </div>
                 </ul>
             </nav>
         </div>
@@ -125,75 +97,37 @@
                                             <label for="inputState" class="form-label">Tipo de Reporte *</label>
                                             <select id="inputState" class="form-select">
                                                 <option value="" selected>Selecciona uno...</option>
-                                                <option value="1">Ingreso Y Salida Residentes</option>
-                                                <option value="2">Ingreso Y Salida Visita</option>
-                                                <option value="3">Residentes Registrados</option>
-                                                <option value="4">Visitas Registradas</option>
+                                                <option value="1">Ingreso y salida residentes</option>
+                                                <option value="2">Ingreso y salida visita</option>
                                             </select>
                                         </div>
                                     </form>
                                 </div>
-                                <div class="col-lg-12 mt-5">
+                                <div class="col-lg-12 mt-5" id="reportResidentTable">
                                     <div class="card rounded rounded-5">
                                         <div class="card-body">
                                             <div class="row">
                                                 <div class="col-lg-12 p-5">
                                                     <div class="table-responsive">
-                                                        <table id="example" class="table table-striped data-table"
-                                                            style="width: 100%">
+                                                        <table class="table table-striped w-100">
                                                             <thead>
                                                                 <tr>
-                                                                    <th>Name</th>
-                                                                    <th>Position</th>
-                                                                    <th>Office</th>
-                                                                    <th>Age</th>
-                                                                    <th>Start date</th>
-                                                                    <th>Salary</th>
+                                                                    <th>Nombre</th>
+                                                                    <th>Dirección</th>
+                                                                    <th>No. Casa</th>
+                                                                    <th>Fecha Ingreso</th>
+                                                                    <th>Fecha Salida</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
                                                                 <tr>
-                                                                    <td>Tiger Nixon</td>
-                                                                    <td>System Architect</td>
-                                                                    <td>Edinburgh</td>
-                                                                    <td>61</td>
+                                                                    <td>Daniel Rivas</td>
+                                                                    <td>7ma Calle 1-52</td>
+                                                                    <td>1-52</td>
                                                                     <td>2011/04/25</td>
-                                                                    <td>$320,800</td>
+                                                                    <td>2011/04/25</td>
                                                                 </tr>
-                                                                <tr>
-                                                                    <td>Garrett Winters</td>
-                                                                    <td>Accountant</td>
-                                                                    <td>Tokyo</td>
-                                                                    <td>63</td>
-                                                                    <td>2011/07/25</td>
-                                                                    <td>$170,750</td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>Ashton Cox</td>
-                                                                    <td>Junior Technical Author</td>
-                                                                    <td>San Francisco</td>
-                                                                    <td>66</td>
-                                                                    <td>2009/01/12</td>
-                                                                    <td>$86,000</td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>Cedric Kelly</td>
-                                                                    <td>Senior Javascript Developer</td>
-                                                                    <td>Edinburgh</td>
-                                                                    <td>22</td>
-                                                                    <td>2012/03/29</td>
-                                                                    <td>$433,060</td>
-                                                                </tr>
-                                                            <tfoot>
-                                                                <tr>
-                                                                    <th>Name</th>
-                                                                    <th>Position</th>
-                                                                    <th>Office</th>
-                                                                    <th>Age</th>
-                                                                    <th>Start date</th>
-                                                                    <th>Salary</th>
-                                                                </tr>
-                                                            </tfoot>
+                                                            </tbody>
                                                         </table>
                                                     </div>
                                                 </div>
@@ -203,12 +137,44 @@
                                     <div class="col-12 mt-4 mb-4">
                                         <div class="row">
                                             <div class="col">
-                                                <button type="submit" class="btn btn-success w-100 py-3">Exportar
+                                                <button type="submit" class="btn btn-success w-100 py-3"><i
+                                                        class="bi bi-file-earmark-excel-fill"></i> Exportar
                                                     Excel</button>
                                             </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 mt-5" id="reportVisitorTable">
+                                    <div class="card rounded rounded-5">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-lg-12 p-5">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-striped w-100">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Fecha Ingreso</th>
+                                                                    <th>Fecha Salida</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td>2011/04/25</td>
+                                                                    <td>2011/04/25</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 mt-4 mb-4">
+                                        <div class="row">
                                             <div class="col">
-                                                <button type="submit" class="btn btn-danger w-100 py-3">Exportar
-                                                    PDF</button>
+                                                <button type="submit" class="btn btn-success w-100 py-3"><i
+                                                        class="bi bi-file-earmark-excel-fill"></i> Exportar
+                                                    Excel</button>
                                             </div>
                                         </div>
                                     </div>
@@ -228,11 +194,7 @@
     <script src="../../assets/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.2/dist/chart.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-    <script src="../../business/a/residents.js"></script>
-    <script>
-        new DataTable('#example');
-    </script>
+    <script src="../../business/a/reports.js"></script>
 </body>
 
 </html>

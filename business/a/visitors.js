@@ -171,8 +171,8 @@ const addDataToVisitorTable = (dataObtained) => {
                 dataObtained.body[i].gender === 1 ? 'Hombre' : 'Mujer' ?? 'Sin Datos',
                 dataObtained.body[i].typeofvisit ?? 'Sin Datos',
                 dataObtained.body[i].housenumber ?? 'Sin Datos',
-                `<img src="${dataObtained.body[i].personalidentificationphoto}" alt="visitor-photo-identification" width="200"/>`,
-                `<img src="${dataObtained.body[i].visitorphoto}" alt="visitor-photo-face" width="200"/>`,
+                `<img src="${dataObtained.body[i].visitorphoto}" alt="visitor-photo-face" width="120"/>`,
+                `<img src="${dataObtained.body[i].personalidentificationphoto}" alt="visitor-photo-identification" width="120"/>`,
                 dataObtained.body[i].createddate ?? 'Sin Datos',
                 dataObtained.body[i].expireddate ?? 'Sin Datos',
                 dataObtained.body[i].usergeneratedinvitation ?? 'Sin Datos',
@@ -293,7 +293,7 @@ const convertPhotoIdToBase64 = () => {
 convertPhotoIdToBase64();
 
 
-//CREATE RESIDENTS
+//CREATE VISITOR
 const createVisitors = () => {
 
     let accessCode = document.getElementById('accessCode').value;
@@ -322,6 +322,8 @@ const createVisitors = () => {
         let myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         myHeaders.append("Authorization", "Bearer " + sessionStorage.getItem('signInToken'));
+
+        console.log(photoFaceVisitor);
 
         var raw = JSON.stringify({
             "id": 0,
@@ -485,6 +487,7 @@ const saveFacePhoto = (insertId) => {
 const saveIdPhoto = (insertId) => {
 
     let photoIdVisitor = document.getElementById('photoIdBase64').value;
+
     let myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     myHeaders.append("Authorization", "Bearer " + sessionStorage.getItem('signInToken'));
@@ -559,7 +562,6 @@ const saveIdPhoto = (insertId) => {
         }
     }
 }
-
 
 
 //DELETE RESIDENTS

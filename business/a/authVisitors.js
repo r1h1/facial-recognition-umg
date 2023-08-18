@@ -244,21 +244,7 @@ const autorizeVisitor = () => {
         else {
             if (dataObtained.status === 200 || dataObtained.status === 201 || dataObtained.status === 304) {
                 try {
-                    Swal.fire({
-                        icon: 'success',
-                        title: '¡Correcto!',
-                        text: 'La autorización fue concedida, el visitante puede ingresar',
-                        footer: 'Si el problema persiste, por favor comunicarse con el administrador o enviar un mensaje usando la opción de soporte indicando el error.',
-                        showDenyButton: false,
-                        showCancelButton: false,
-                        confirmButtonText: 'Entendido',
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location.href = '../../views/a/auth_visitors'
-                        } else if (result.isDenied) {
-                            window.location.href = '../../views/a/auth_visitors'
-                        }
-                    });
+                    createVisitorEntry();
                 }
                 catch (err) {
                     Swal.fire({
@@ -357,6 +343,88 @@ const denyVisitor = () => {
                     icon: 'error',
                     title: '¡Lo Sentimos!',
                     text: 'No se pudo concretar la operación, intente de nuevo',
+                    footer: 'Si el problema persiste, por favor comunicarse con el administrador o enviar un mensaje usando la opción de soporte indicando el error.',
+                    confirmButtonText: 'Entendido'
+                });
+            }
+        }
+    }
+}
+
+
+const createVisitorEntry = () => {
+
+    let myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Authorization", "Bearer " + sessionStorage.getItem('signInToken'));
+
+    var raw = JSON.stringify({
+        "id": 0,
+        "iduser": 1,
+        "dateandhourentry": year + '-' + month + '-' + day,
+        "dateandhourexit": '',
+        "typeuser": 0
+    });
+
+    console.log(raw);
+
+    var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+    };
+
+    fetch(apiRouteEntrysAndExits, requestOptions)
+        .then(response => response.json())
+        .then(dataObtained => showData(dataObtained))
+        .catch(error => err = error);
+
+    const showData = (dataObtained) => {
+        if (dataObtained.body === 'Error de Servidor') {
+            Swal.fire({
+                icon: 'error',
+                title: '¡Lo Sentimos!',
+                text: 'No se pudo concretar la operación, intenta de nuevo',
+                footer: 'Si el problema persiste, por favor comunicarse con el administrador o enviar un mensaje usando la opción de soporte indicando el error.',
+                confirmButtonText: 'Entendido'
+            });
+        }
+        else {
+            if (dataObtained.status === 200 || dataObtained.status === 201 || dataObtained.status === 304) {
+                try {
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Correcto!',
+                        text: 'Se registra con éxito la entrada del visitante, se completan las operaciones, ingreso permitido',
+                        footer: '',
+                        showDenyButton: false,
+                        showCancelButton: false,
+                        confirmButtonText: 'Entendido',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = '../../views/a/auth_visitors';
+                        } else if (result.isDenied) {
+                            window.location.href = '../../views/a/auth_visitors';
+                        }
+                    });
+
+                }
+                catch (err) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: '¡Lo Sentimos!',
+                        text: 'Sa ha generado un error interno',
+                        footer: 'Si el problema persiste, por favor comunicarse con el administrador o enviar un mensaje usando la opción de soporte indicando el error.',
+                        confirmButtonText: 'Entendido'
+                    });
+                }
+            }
+            else {
+                Swal.fire({
+                    icon: 'error',
+                    title: '¡Lo Sentimos!',
+                    text: 'Sa ha generado un error interno',
                     footer: 'Si el problema persiste, por favor comunicarse con el administrador o enviar un mensaje usando la opción de soporte indicando el error.',
                     confirmButtonText: 'Entendido'
                 });

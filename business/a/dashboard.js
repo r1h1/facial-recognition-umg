@@ -117,6 +117,10 @@ const getTotalsOfResidents = () => {
 getTotalsOfResidents();
 
 
+//ARRAY FOR SET TOTALS VISITORS AND RESIDENTS IN CANVAS GRAPHIC
+let totalsResidentsEntrys = [];
+let totalsVisitorsEntrys = [];
+
 //OBTAIN TOTAL OF VISITORS
 const getTotalsOfVisitors = () => {
 
@@ -168,7 +172,17 @@ const getTotalsOfResidentsEntrys = () => {
 
     const showData = (dataObtained) => {
         try {
-            document.getElementById('totalResidentsEntry').innerHTML = dataObtained.body.length;
+            let quantity = 0;
+            for (let i = 0; i < dataObtained.body.length; i++) {
+                if (dataObtained.body[i].typeuser === 1) {
+                    quantity = quantity + 1;
+                }
+                else {
+                    // NOTHING
+                }
+            }
+            document.getElementById('totalResidentsEntry').innerHTML = quantity;
+            totalsResidentsEntrys.push(quantity);
         }
         catch (err) {
             console.log(err);
@@ -199,7 +213,18 @@ const getTotalsOfVisitorsEntrys = () => {
 
     const showData = (dataObtained) => {
         try {
-            document.getElementById('totalVisitorsEntry').innerHTML = dataObtained.body.length;
+            let quantity = 0;
+            for (let i = 0; i < dataObtained.body.length; i++) {
+                if (dataObtained.body[i].typeuser === 0) {
+                    quantity = quantity + 1;
+                }
+                else {
+                    // NOTHING
+                }
+            }
+            document.getElementById('totalVisitorsEntry').innerHTML = quantity;
+            totalsVisitorsEntrys.push(quantity);
+            setResidentsAndVisitorsQuantityInCanvas();
         }
         catch (err) {
             console.log(err);
@@ -225,7 +250,7 @@ const setResidentsAndVisitorsQuantityInCanvas = () => {
                 datasets: [
                     {
                         label: "# De Ingresos",
-                        data: [1,1],
+                        data: [totalsVisitorsEntrys[0] ?? 0, totalsResidentsEntrys[0] ?? 0],
                         backgroundColor: [
                             "rgba(255, 99, 132, 0.2)",
                             "rgba(54, 162, 235, 0.2)"
@@ -254,4 +279,3 @@ const setResidentsAndVisitorsQuantityInCanvas = () => {
         });
     });
 }
-setResidentsAndVisitorsQuantityInCanvas();

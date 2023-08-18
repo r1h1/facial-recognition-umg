@@ -8,26 +8,6 @@ CREATE TABLE rol (
     name VARCHAR(50) NOT NULL
 );
 
-INSERT INTO
-    `rol`(`id`, `name`)
-VALUES
-    (1, 'Super Administrador');
-
-INSERT INTO
-    `rol`(`id`, `name`)
-VALUES
-    (2, 'Administrador');
-
-INSERT INTO
-    `rol`(`id`, `name`)
-VALUES
-    (3, 'Residente');
-
-INSERT INTO
-    `rol`(`id`, `name`)
-VALUES
-    (4, 'Seguridad');
-
 -- CREACION DE TABLA MÓDULOS
 CREATE TABLE modules (
     id INT PRIMARY KEY NOT NULL auto_increment,
@@ -37,18 +17,7 @@ CREATE TABLE modules (
     FOREIGN KEY (idrol) REFERENCES rol(id)
 );
 
--- MODULOS PARA ROL SUPER ADMINISTRADOR
-INSERT INTO
-    `modules`(`id`, `name`, `route`, `idrol`)
-VALUES
-    (
-        1,
-        'Dashboard',
-        '<li class="activo shadow mt-2"><a href="../dashboard/component" class="text-decoration-none px-3 py-2 d-block"><i class="fa-solid fa-gauge me-3"></i> Dashboard</a></li>',
-        1
-    );
-
--- CREACION DE TABLA USUARIO
+-- CREACION DE TABLA USUARIOS RESIDENTES
 CREATE TABLE users (
     id INT PRIMARY KEY NOT NULL auto_increment,
     fullname VARCHAR(250),
@@ -71,17 +40,8 @@ CREATE TABLE auth (
     password varchar(250)
 );
 
--- CREACION DE TABLA PRODUCTOS
-CREATE TABLE entrys_and_exits (
-    id INT PRIMARY KEY NOT NULL auto_increment,
-    iduser INT,
-    dateandhourentry VARCHAR(50),
-    dateandhourexit VARCHAR(50),
-    FOREIGN KEY (iduser) REFERENCES users(id)
-);
 
-
--- CREACION DE TABLA EXTRA INGREDIENTES POR PRODUCTO
+-- CREACION DE TABLA VISITANTES
 CREATE TABLE visitors (
     id INT PRIMARY KEY NOT NULL auto_increment,
     accesscode VARCHAR(50),
@@ -101,6 +61,17 @@ CREATE TABLE visitors (
 );
 
 
+-- CREACION DE TABLA INGRESOS Y SALIDAS
+CREATE TABLE entrys_and_exits (
+    id INT PRIMARY KEY NOT NULL auto_increment,
+    iduser INT,
+    dateandhourentry VARCHAR(50),
+    dateandhourexit VARCHAR(50),
+    typeuser INT
+    FOREIGN KEY (iduser) REFERENCES users(id)
+);
+
+
 -- INGRESOS DE MODULOS
 INSERT INTO
     `modules` (`id`, `name`, `route`, `idrol`)
@@ -113,8 +84,8 @@ VALUES
     ),
     (
         2,
-        'Mantenimiento Residentes',
-        '<li><a href=\"residents\" class=\"nav-link px-3\"><span class=\"me-2\"><i class=\"bi bi-people-fill\"></i></span><span>Mantenimiento Residentes</span></a></li>',
+        'Mantenimiento Personas',
+        '<li><a href=\"residents\" class=\"nav-link px-3\"><span class=\"me-2\"><i class=\"bi bi-people-fill\"></i></span><span>Mantenimiento Personas</span></a></li>',
         1
     ),
     (
@@ -143,8 +114,8 @@ VALUES
     ),
     (
         7,
-        'Mantenimiento Residentes',
-        '<li><a href=\"residents\" class=\"nav-link px-3\"><span class=\"me-2\"><i class=\"bi bi-people-fill\"></i></span><span>Mantenimiento Residentes</span></a></li>',
+        'Mantenimiento Personas',
+        '<li><a href=\"residents\" class=\"nav-link px-3\"><span class=\"me-2\"><i class=\"bi bi-people-fill\"></i></span><span>Mantenimiento Personas</span></a></li>',
         2
     ),
     (
@@ -204,7 +175,9 @@ VALUES
 
 -- USUARIO REGISTRADO
 INSERT INTO `users` (`id`, `fullname`, `address`, `phonenumber`, `email`, `cui`, `housenumber`, `idrol`, `status`, `gender`, `photo`) VALUES
-(1, 'Daniel Rivas', 'Petapa', '45024363', 'de.rivasherrera@gmail.com', '3050000040117', '7 1-52', 1, 1, 1, '');
+(1, 'Visitante', '', '', '', '', '', 4, 0, 1, '');
+INSERT INTO `users` (`id`, `fullname`, `address`, `phonenumber`, `email`, `cui`, `housenumber`, `idrol`, `status`, `gender`, `photo`) VALUES
+(2, 'Daniel Rivas', 'Petapa', '45024363', 'de.rivasherrera@gmail.com', '3050000040117', '7 1-52', 1, 1, 1, '');
 
 
 

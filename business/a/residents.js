@@ -130,22 +130,24 @@ const addDataToResidentTable = (dataObtained) => {
     }
     else {
         for (let i = 0; i < dataObtained.body.length; i++) {
-            dataSet.push([
-                dataObtained.body[i].fullname ?? 'Sin Datos',
-                dataObtained.body[i].address ?? 'Sin Datos',
-                dataObtained.body[i].phonenumber ?? 'Sin Datos',
-                dataObtained.body[i].email ?? 'Sin Datos',
-                dataObtained.body[i].cui ?? 'Sin Datos',
-                dataObtained.body[i].housenumber ?? 'Sin Datos',
-                dataObtained.body[i].idrol === 1 ? 'Super Administrador' : dataObtained.body[i].idrol === 2 ? 'Administrador' : dataObtained.body[i].idrol === 3 ? 'Residente' : dataObtained.body[i].idrol === 4 ? 'Seguridad' : 'Desconocido' ?? 'Sin Datos',
-                dataObtained.body[i].status === 1 ? 'Activo' : 'Inactivo' ?? 'Sin Datos',
-                dataObtained.body[i].gender === 1 ? 'Hombre' : 'Mujer',
-                `<button class="btn btn-warning" onclick="setInfoResident(${dataObtained.body[i].id}, '${dataObtained.body[i].fullname}', '${dataObtained.body[i].address}',
-                 ${dataObtained.body[i].phonenumber},
-                 '${dataObtained.body[i].email}', ${dataObtained.body[i].cui}, '${dataObtained.body[i].housenumber}', ${dataObtained.body[i].idrol},
-                 ${dataObtained.body[i].status}, ${dataObtained.body[i].gender})"><i class="bi bi-pencil-square"></i></button>`,
-                `<button class="btn btn-danger" onclick="deleteResident(${dataObtained.body[i].id})"><i class="bi bi-trash-fill"></i></button>`
-            ]);
+            if (dataObtained.body[i].fullname != 'Visitante') {
+                dataSet.push([
+                    dataObtained.body[i].fullname ?? 'Sin Datos',
+                    dataObtained.body[i].address ?? 'Sin Datos',
+                    dataObtained.body[i].phonenumber ?? 'Sin Datos',
+                    dataObtained.body[i].email ?? 'Sin Datos',
+                    dataObtained.body[i].cui ?? 'Sin Datos',
+                    dataObtained.body[i].housenumber ?? 'Sin Datos',
+                    dataObtained.body[i].idrol === 1 ? 'Super Administrador' : dataObtained.body[i].idrol === 2 ? 'Administrador' : dataObtained.body[i].idrol === 3 ? 'Residente' : dataObtained.body[i].idrol === 4 ? 'Seguridad' : 'Desconocido' ?? 'Sin Datos',
+                    dataObtained.body[i].status === 1 ? 'Activo' : 'Inactivo' ?? 'Sin Datos',
+                    dataObtained.body[i].gender === 1 ? 'Hombre' : 'Mujer',
+                    `<button class="btn btn-warning" onclick="setInfoResident(${dataObtained.body[i].id}, '${dataObtained.body[i].fullname}', '${dataObtained.body[i].address}',
+                     ${dataObtained.body[i].phonenumber},
+                     '${dataObtained.body[i].email}', ${dataObtained.body[i].cui}, '${dataObtained.body[i].housenumber}', ${dataObtained.body[i].idrol},
+                     ${dataObtained.body[i].status}, ${dataObtained.body[i].gender})"><i class="bi bi-pencil-square"></i></button>`,
+                    `<button class="btn btn-danger" onclick="deleteResident(${dataObtained.body[i].id})"><i class="bi bi-trash-fill"></i></button>`
+                ]);
+            }
         }
     }
 
