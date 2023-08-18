@@ -89,7 +89,7 @@ CREATE TABLE visitors (
     addresstovisit VARCHAR(250),
     cui VARCHAR(50),
     gender INT,
-    tipeofvisit VARCHAR(50),
+    typeofvisit VARCHAR(50),
     housenumber VARCHAR(50),
     personalidentificationphoto TEXT,
     visitorphoto TEXT,

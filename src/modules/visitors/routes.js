@@ -7,6 +7,7 @@ const controller = require('./index');
 //RUTAS PARA CONSULTAR
 router.get('/', security(), data);
 router.get('/:id', security(), oneData);
+router.get('/searchVisitor/:accesscode', security(), visitorData);
 router.post('/', security(), addData);
 router.put('/', security(), deleteData);
 
@@ -34,14 +35,30 @@ async function oneData(req, res, next) {
     }
 };
 
+//CONSULTAR VISITANTE POR CÓDIGO DE ACCESO
+async function visitorData(req, res, next) {
+    try {
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        const items = await controller.visitorData(req.params.accesscode).then((items) => {
+            responses.success(req, res, items, 200);
+        });
+    }
+    catch (err) {
+        next(err);
+    }
+};
+
 //CREAR UN NUEVO ITEM
 async function addData(req, res, next) {
     try {
+        res.setHeader('Access-Control-Allow-Origin', '*');
         const items = await controller.addData(req.body);
         if (req.body.id == 0) {
+            res.setHeader('Access-Control-Allow-Origin', '*');
             message = 'Created OK';
         }
         else {
+            res.setHeader('Access-Control-Allow-Origin', '*');
             message = 'Updated OK';
         }
         responses.success(req, res, items, 201);

@@ -65,7 +65,7 @@ const accessNumberGenerated = () => {
 accessNumberGenerated();
 
 
-//GER DATE
+//GET DATE
 const getDate = new Date();
 const year = getDate.getFullYear();
 const month = (getDate.getMonth() + 1) < 10 ? '0' + (getDate.getMonth() + 1) : (getDate.getMonth() + 1);
@@ -169,14 +169,14 @@ const addDataToVisitorTable = (dataObtained) => {
                 dataObtained.body[i].addresstovisit ?? 'Sin Datos',
                 dataObtained.body[i].cui ?? 'Sin Datos',
                 dataObtained.body[i].gender === 1 ? 'Hombre' : 'Mujer' ?? 'Sin Datos',
-                dataObtained.body[i].tipeofvisit ?? 'Sin Datos',
+                dataObtained.body[i].typeofvisit ?? 'Sin Datos',
                 dataObtained.body[i].housenumber ?? 'Sin Datos',
                 `<img src="${dataObtained.body[i].personalidentificationphoto}" alt="visitor-photo-identification" width="200"/>`,
                 `<img src="${dataObtained.body[i].visitorphoto}" alt="visitor-photo-face" width="200"/>`,
                 dataObtained.body[i].createddate ?? 'Sin Datos',
                 dataObtained.body[i].expireddate ?? 'Sin Datos',
                 dataObtained.body[i].usergeneratedinvitation ?? 'Sin Datos',
-                dataObtained.body[i].authorization === 1 ? 'Acceso Concedido' : dataObtained.body[i].authorization === 2 ? 'Pendiente Acceso' : 'Acceso Denegado' ?? 'Sin Datos',
+                dataObtained.body[i].authorization === 1 ? 'Acceso Concedido' : dataObtained.body[i].authorization === 2 ? 'Pendiente o Vencido' : 'Acceso Denegado' ?? 'Sin Datos',
                 `<button class="btn btn-danger" onclick="deleteVisitor(${dataObtained.body[i].id})"><i class="bi bi-trash-fill"></i></button>`
             ]);
         }
@@ -330,15 +330,15 @@ const createVisitors = () => {
             "addresstovisit": addressVisitor,
             "cui": cuiVisitor,
             "gender": genderVisitor,
-            "tipeofvisit": entryTypeVisitor,
+            "typeofvisit": entryTypeVisitor,
             "housenumber": houseNumberVisitor,
-            "personalidentificationphoto": photoFaceVisitor,
-            "visitorphoto": photoIdVisitor,
             "createddate": year + '-' + month + '-' + day,
             "expireddate": year + '-' + month + '-' + day,
             "usergeneratedinvitation": userInformation[0].id,
             "authorization": 2
         });
+
+        console.log(raw);
 
         var requestOptions = {
             method: 'POST',
@@ -368,18 +368,21 @@ const createVisitors = () => {
                         Swal.fire({
                             icon: 'success',
                             title: '¡Correcto!',
-                            text: 'La operación se completó con éxito',
+                            text: 'Se guardó con éxito la información del visitante',
                             footer: '',
                             showDenyButton: false,
                             showCancelButton: false,
                             confirmButtonText: 'Entendido',
                         }).then((result) => {
                             if (result.isConfirmed) {
-                                window.location.href = '../../views/a/visitors'
+                                saveFacePhoto(dataObtained.body.insertId);
+                                saveIdPhoto(dataObtained.body.insertId);
                             } else if (result.isDenied) {
-                                window.location.href = '../../views/a/visitors'
+                                saveFacePhoto(dataObtained.body.insertId);
+                                saveIdPhoto(dataObtained.body.insertId);
                             }
                         });
+
                     }
                     catch (err) {
                         Swal.fire({
@@ -404,6 +407,160 @@ const createVisitors = () => {
         }
     }
 }
+
+
+//SAVE FACE PHOTO FROM VISITOR
+const saveFacePhoto = (insertId) => {
+
+    let photoFaceVisitor = document.getElementById('photoFaceBase64').value;
+    let myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Authorization", "Bearer " + sessionStorage.getItem('signInToken'));
+
+    var raw = JSON.stringify({
+        "id": insertId,
+        "personalidentificationphoto": photoFaceVisitor
+    });
+
+    console.log(raw);
+
+    var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+    };
+
+    fetch(apiRouteVisitors, requestOptions)
+        .then(response => response.json())
+        .then(dataObtained => showData(dataObtained))
+        .catch(error => err = error);
+
+    const showData = (dataObtained) => {
+        if (dataObtained.body === 'Error de Servidor') {
+            Swal.fire({
+                icon: 'error',
+                title: '¡Lo Sentimos!',
+                text: 'No se pudo guardar la fotografía del rostro, intenta de nuevo',
+                footer: 'Si el problema persiste, por favor comunicarse con el administrador o enviar un mensaje usando la opción de soporte indicando el error.',
+                confirmButtonText: 'Entendido'
+            });
+        }
+        else {
+            if (dataObtained.status === 200 || dataObtained.status === 201 || dataObtained.status === 304) {
+                try {
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Correcto!',
+                        text: 'Se guardó con éxito la fotografía del rostro del visitante',
+                        footer: '',
+                        confirmButtonText: 'Entendido'
+                    });
+                }
+                catch (err) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: '¡Lo Sentimos!',
+                        text: 'No se pudo guardar la fotografía del rostro, intenta de nuevo',
+                        footer: 'Si el problema persiste, por favor comunicarse con el administrador o enviar un mensaje usando la opción de soporte indicando el error.',
+                        confirmButtonText: 'Entendido'
+                    });
+                }
+            }
+            else {
+                Swal.fire({
+                    icon: 'error',
+                    title: '¡Lo Sentimos!',
+                    text: 'No se pudo guardar la fotografía del rostro, intenta de nuevo',
+                    footer: 'Si el problema persiste, por favor comunicarse con el administrador o enviar un mensaje usando la opción de soporte indicando el error.',
+                    confirmButtonText: 'Entendido'
+                });
+            }
+        }
+    }
+}
+
+
+//SAVE ID PHOTO FROM VISITOR
+const saveIdPhoto = (insertId) => {
+
+    let photoIdVisitor = document.getElementById('photoIdBase64').value;
+    let myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Authorization", "Bearer " + sessionStorage.getItem('signInToken'));
+
+    var raw = JSON.stringify({
+        "id": insertId,
+        "visitorphoto": photoIdVisitor
+    });
+
+    console.log(raw);
+
+    var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+    };
+
+    fetch(apiRouteVisitors, requestOptions)
+        .then(response => response.json())
+        .then(dataObtained => showData(dataObtained))
+        .catch(error => err = error);
+
+    const showData = (dataObtained) => {
+        if (dataObtained.body === 'Error de Servidor') {
+            Swal.fire({
+                icon: 'error',
+                title: '¡Lo Sentimos!',
+                text: 'No se pudo guardar la fotografía del rostro, intenta de nuevo',
+                footer: 'Si el problema persiste, por favor comunicarse con el administrador o enviar un mensaje usando la opción de soporte indicando el error.',
+                confirmButtonText: 'Entendido'
+            });
+        }
+        else {
+            if (dataObtained.status === 200 || dataObtained.status === 201 || dataObtained.status === 304) {
+                try {
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Correcto!',
+                        text: 'Se guardó con éxito la fotografía de la identificación del visitante, las operaciones fueron exitosas',
+                        footer: '',
+                        showDenyButton: false,
+                        showCancelButton: false,
+                        confirmButtonText: 'Entendido',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = '../../views/a/visitors'
+                        } else if (result.isDenied) {
+                            window.location.href = '../../views/a/visitors'
+                        }
+                    });
+                }
+                catch (err) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: '¡Lo Sentimos!',
+                        text: 'No se pudo guardar la fotografía del rostro, intenta de nuevo',
+                        footer: 'Si el problema persiste, por favor comunicarse con el administrador o enviar un mensaje usando la opción de soporte indicando el error.',
+                        confirmButtonText: 'Entendido'
+                    });
+                }
+            }
+            else {
+                Swal.fire({
+                    icon: 'error',
+                    title: '¡Lo Sentimos!',
+                    text: 'No se pudo guardar la fotografía del rostro, intenta de nuevo',
+                    footer: 'Si el problema persiste, por favor comunicarse con el administrador o enviar un mensaje usando la opción de soporte indicando el error.',
+                    confirmButtonText: 'Entendido'
+                });
+            }
+        }
+    }
+}
+
+
 
 //DELETE RESIDENTS
 const deleteVisitor = (idUserToEliminate) => {

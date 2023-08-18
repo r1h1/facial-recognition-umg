@@ -75,6 +75,16 @@ const rolData = (table, idrol) => {
 }
 
 
+//DEVOLVER DATOS DEL VISITANTE POR ACCESO
+const visitorData = (table, accesscode) => {
+    return new Promise((resolve, reject) => {
+        stringConnection.query(`SELECT * FROM ${table} WHERE accesscode='${accesscode}'`, (error, result) => {
+            return error ? reject(error) : resolve(result);
+        });
+    });
+}
+
+
 //INSERTAR UN REGISTRO DE LA BASE DE DATOS
 const addData = (table, data) => {
     return new Promise((resolve, reject) => {
@@ -109,5 +119,6 @@ module.exports = {
     addData,
     deleteData,
     query,
-    rolData
+    rolData,
+    visitorData
 }
