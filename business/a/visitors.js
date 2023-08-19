@@ -164,24 +164,9 @@ const addDataToVisitorTable = (dataObtained) => {
     else {
         for (let i = 0; i < dataObtained.body.length; i++) {
             if (userInformation[0].idrol === 3 || userInformation[0].idrol === 4) {
-                dataSet.push([
-                    dataObtained.body[i].accesscode ?? 'Sin Datos',
-                    dataObtained.body[i].fullname ?? 'Sin Datos',
-                    'Sin autorización',
-                    'Sin autorización',
-                    dataObtained.body[i].gender === 1 ? 'Hombre' : 'Mujer' ?? 'Sin Datos',
-                    'Sin autorización',
-                    'Sin autorización',
-                    'Sin autorización',
-                    'Sin autorización',
-                    dataObtained.body[i].createddate ?? 'Sin Datos',
-                    dataObtained.body[i].expireddate ?? 'Sin Datos',
-                    'Sin autorización',
-                    dataObtained.body[i].authorization === 1 ? 'Acceso Concedido' : dataObtained.body[i].authorization === 2 ? 'Pendiente o Vencido' : 'Acceso Denegado' ?? 'Sin Datos',
-                    ''
-                ]);
+                document.getElementById('visitorTableDisplay').style.display = 'none';
             }
-            if(userInformation[0].idrol === 1 || userInformation[0].idrol === 2) {
+            if (userInformation[0].idrol === 1 || userInformation[0].idrol === 2) {
                 dataSet.push([
                     dataObtained.body[i].accesscode ?? 'Sin Datos',
                     dataObtained.body[i].fullname ?? 'Sin Datos',
@@ -390,7 +375,7 @@ const createVisitors = () => {
                         Swal.fire({
                             icon: 'success',
                             title: '¡Correcto!',
-                            text: 'Se guardó con éxito la información del visitante',
+                            text: 'Código de acceso: ' + accessCode,
                             footer: '',
                             showDenyButton: false,
                             showCancelButton: false,
