@@ -211,7 +211,7 @@ const getVisitorEntryAndExit = () => {
         const showData = (dataObtained) => {
             try {
                 if (dataObtained.body.length === 0) {
-                    document.getElementById('reportVisitorTable').style.display = 'block';
+                    document.getElementById('reportVisitorTable').style.display = 'none';
                     document.getElementById('reportResidentTable').style.display = 'none';
                     Swal.fire({
                         icon: 'info',
