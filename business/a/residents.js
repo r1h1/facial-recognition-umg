@@ -205,7 +205,7 @@ const createResidents = () => {
     let passwordResident = document.getElementById('passwordResident').value;
 
     if (nameResident === '' || addressResident === '' || phoneResident === '' || emailResident === '' ||
-        cuiResident === '' || houseNumberResident === '' || photoResident === '' || genderResident === '' ||
+        cuiResident === '' || houseNumberResident === '' || genderResident === '' ||
         rolResident === '' || passwordResident === '') {
         Swal.fire({
             icon: 'warning',

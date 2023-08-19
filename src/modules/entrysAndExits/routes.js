@@ -7,6 +7,8 @@ const controller = require('./index');
 //RUTAS PARA CONSULTAR
 router.get('/', security(), data);
 router.get('/:id', security(), oneData);
+router.get('/reportVisitors/:dateandhourentry/:dateandhourexit', security(), reportVisitorEntrysDates);
+router.get('/reportResident/:dateandhourentry/:dateandhourexit', security(), reportResidentEntrysDates);
 router.post('/', security(), addData);
 router.put('/', security(), deleteData);
 
@@ -26,6 +28,30 @@ async function data(req, res, next) {
 async function oneData(req, res, next) {
     try {
         const items = await controller.oneData(req.params.id).then((items) => {
+            responses.success(req, res, items, 200);
+        });
+    }
+    catch (err) {
+        next(err);
+    }
+};
+
+//CONSULTAR POR FECHAS VISITANTE
+async function reportVisitorEntrysDates(req, res, next) {
+    try {
+        const items = await controller.reportVisitorEntrysDates(req.params.dateandhourentry, req.params.dateandhourexit).then((items) => {
+            responses.success(req, res, items, 200);
+        });
+    }
+    catch (err) {
+        next(err);
+    }
+};
+
+//CONSULTAR POR FECHAS RESIDENTE
+async function reportResidentEntrysDates(req, res, next) {
+    try {
+        const items = await controller.reportResidentEntrysDates(req.params.dateandhourentry, req.params.dateandhourexit).then((items) => {
             responses.success(req, res, items, 200);
         });
     }

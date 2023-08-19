@@ -107,7 +107,16 @@ const getTotalsOfResidents = () => {
 
     const showData = (dataObtained) => {
         try {
-            document.getElementById('totalResidents').innerHTML = dataObtained.body.length;
+            let quantity = 0;
+            for (let i = 0; i < dataObtained.body.length; i++) {
+                if (dataObtained.body[i].fullname != 'Visitante') {
+                    quantity = quantity + 1;
+                }
+                else {
+                    // NOTHING
+                }
+            }
+            document.getElementById('totalResidents').innerHTML = quantity;
         }
         catch (err) {
             console.log(err);

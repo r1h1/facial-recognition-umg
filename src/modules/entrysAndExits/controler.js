@@ -16,6 +16,14 @@ module.exports = function (dbInjected) {
         return db.oneData(dataTable, id);
     }
 
+    const reportVisitorEntrysDates = (dateandhourentry, dateandhourexit) => {
+        return db.reportVisitorEntrysDates(dataTable, dateandhourentry, dateandhourexit);
+    }
+
+    const reportResidentEntrysDates = (dateandhourentry, dateandhourexit) => {
+        return db.reportResidentEntrysDates(dataTable, dateandhourentry, dateandhourexit);
+    }
+
     const addData = (body) => {
         return db.addData(dataTable, body);
     }
@@ -27,6 +35,8 @@ module.exports = function (dbInjected) {
     return {
         data,
         oneData,
+        reportVisitorEntrysDates,
+        reportResidentEntrysDates,
         deleteData,
         addData
     }

@@ -163,22 +163,42 @@ const addDataToVisitorTable = (dataObtained) => {
     }
     else {
         for (let i = 0; i < dataObtained.body.length; i++) {
-            dataSet.push([
-                dataObtained.body[i].accesscode ?? 'Sin Datos',
-                dataObtained.body[i].fullname ?? 'Sin Datos',
-                dataObtained.body[i].addresstovisit ?? 'Sin Datos',
-                dataObtained.body[i].cui ?? 'Sin Datos',
-                dataObtained.body[i].gender === 1 ? 'Hombre' : 'Mujer' ?? 'Sin Datos',
-                dataObtained.body[i].typeofvisit ?? 'Sin Datos',
-                dataObtained.body[i].housenumber ?? 'Sin Datos',
-                `<img src="${dataObtained.body[i].visitorphoto}" alt="visitor-photo-face" width="120"/>`,
-                `<img src="${dataObtained.body[i].personalidentificationphoto}" alt="visitor-photo-identification" width="120"/>`,
-                dataObtained.body[i].createddate ?? 'Sin Datos',
-                dataObtained.body[i].expireddate ?? 'Sin Datos',
-                dataObtained.body[i].usergeneratedinvitation ?? 'Sin Datos',
-                dataObtained.body[i].authorization === 1 ? 'Acceso Concedido' : dataObtained.body[i].authorization === 2 ? 'Pendiente o Vencido' : 'Acceso Denegado' ?? 'Sin Datos',
-                `<button class="btn btn-danger" onclick="deleteVisitor(${dataObtained.body[i].id})"><i class="bi bi-trash-fill"></i></button>`
-            ]);
+            if (userInformation[0].idrol === 3 || userInformation[0].idrol === 4) {
+                dataSet.push([
+                    dataObtained.body[i].accesscode ?? 'Sin Datos',
+                    dataObtained.body[i].fullname ?? 'Sin Datos',
+                    'Sin autorización',
+                    'Sin autorización',
+                    dataObtained.body[i].gender === 1 ? 'Hombre' : 'Mujer' ?? 'Sin Datos',
+                    'Sin autorización',
+                    'Sin autorización',
+                    'Sin autorización',
+                    'Sin autorización',
+                    dataObtained.body[i].createddate ?? 'Sin Datos',
+                    dataObtained.body[i].expireddate ?? 'Sin Datos',
+                    'Sin autorización',
+                    dataObtained.body[i].authorization === 1 ? 'Acceso Concedido' : dataObtained.body[i].authorization === 2 ? 'Pendiente o Vencido' : 'Acceso Denegado' ?? 'Sin Datos',
+                    ''
+                ]);
+            }
+            if(userInformation[0].idrol === 1 || userInformation[0].idrol === 2) {
+                dataSet.push([
+                    dataObtained.body[i].accesscode ?? 'Sin Datos',
+                    dataObtained.body[i].fullname ?? 'Sin Datos',
+                    dataObtained.body[i].addresstovisit ?? 'Sin Datos',
+                    dataObtained.body[i].cui ?? 'Sin Datos',
+                    dataObtained.body[i].gender === 1 ? 'Hombre' : 'Mujer' ?? 'Sin Datos',
+                    dataObtained.body[i].typeofvisit ?? 'Sin Datos',
+                    dataObtained.body[i].housenumber ?? 'Sin Datos',
+                    `<img src="${dataObtained.body[i].visitorphoto}" alt="visitor-photo-face" width="120"/>`,
+                    `<img src="${dataObtained.body[i].personalidentificationphoto}" alt="visitor-photo-identification" width="120"/>`,
+                    dataObtained.body[i].createddate ?? 'Sin Datos',
+                    dataObtained.body[i].expireddate ?? 'Sin Datos',
+                    dataObtained.body[i].usergeneratedinvitation ?? 'Sin Datos',
+                    dataObtained.body[i].authorization === 1 ? 'Acceso Concedido' : dataObtained.body[i].authorization === 2 ? 'Pendiente o Vencido' : 'Acceso Denegado' ?? 'Sin Datos',
+                    `<button class="btn btn-danger" onclick="deleteVisitor(${dataObtained.body[i].id})"><i class="bi bi-trash-fill"></i></button>`
+                ]);
+            }
         }
     }
 

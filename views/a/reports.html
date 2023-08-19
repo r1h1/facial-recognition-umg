@@ -10,8 +10,13 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css" />
     <link rel="stylesheet" href="../../assets/css/style.css" />
     <link rel="icon" href="../../assets/img/logo.png">
+
     <!-- SweetAlert2 Library -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- SHEET JS FOR IMPORT DATA TO EXCEL -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
+
     <title>Valles de San Miguel Petapa</title>
 </head>
 
@@ -84,32 +89,35 @@
                         <div class="card-body py-5">
                             <div class="row">
                                 <div class="col-lg-12">
+
+                                    <input type="text" id="dataCompleteReport" hidden>
+
                                     <form class="row g-3">
                                         <div class="col-md-4">
                                             <label for="inputEmail4" class="form-label">Fecha Inicio *</label>
-                                            <input type="date" class="form-control" id="inputEmail4">
+                                            <input type="date" class="form-control" id="dateEntry">
                                         </div>
                                         <div class="col-md-4">
                                             <label for="inputEmail4" class="form-label">Fecha Fin *</label>
-                                            <input type="date" class="form-control" id="inputEmail4">
+                                            <input type="date" class="form-control" id="dateExit">
                                         </div>
                                         <div class="col-md-4">
                                             <label for="inputState" class="form-label">Tipo de Reporte *</label>
-                                            <select id="inputState" class="form-select">
+                                            <select id="typeReport" class="form-select" onchange="typeReportFilter()">
                                                 <option value="" selected>Selecciona uno...</option>
                                                 <option value="1">Ingreso y salida residentes</option>
-                                                <option value="2">Ingreso y salida visita</option>
+                                                <option value="0">Ingreso y salida visita</option>
                                             </select>
                                         </div>
                                     </form>
                                 </div>
-                                <div class="col-lg-12 mt-5" id="reportResidentTable">
+                                <div class="col-lg-12 mt-5 w-100" id="reportResidentTable">
                                     <div class="card rounded rounded-5">
                                         <div class="card-body">
                                             <div class="row">
-                                                <div class="col-lg-12 p-5">
+                                                <div class="col-lg-12">
                                                     <div class="table-responsive">
-                                                        <table class="table table-striped w-100">
+                                                        <table class="table table-striped w-100" id="tableResidentData">
                                                             <thead>
                                                                 <tr>
                                                                     <th>Nombre</th>
@@ -119,14 +127,8 @@
                                                                     <th>Fecha Salida</th>
                                                                 </tr>
                                                             </thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td>Daniel Rivas</td>
-                                                                    <td>7ma Calle 1-52</td>
-                                                                    <td>1-52</td>
-                                                                    <td>2011/04/25</td>
-                                                                    <td>2011/04/25</td>
-                                                                </tr>
+                                                            <tbody id="reportResidentTableBody">
+                                                                <!-- DATA -->
                                                             </tbody>
                                                         </table>
                                                     </div>
@@ -137,31 +139,33 @@
                                     <div class="col-12 mt-4 mb-4">
                                         <div class="row">
                                             <div class="col">
-                                                <button type="submit" class="btn btn-success w-100 py-3"><i
+                                                <button type="submit" class="btn btn-success w-100 py-3" onclick="exportEntryResident()"><i
                                                         class="bi bi-file-earmark-excel-fill"></i> Exportar
                                                     Excel</button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-12 mt-5" id="reportVisitorTable">
+                                <div class="col-lg-12 mt-5 w-100" id="reportVisitorTable">
                                     <div class="card rounded rounded-5">
                                         <div class="card-body">
                                             <div class="row">
-                                                <div class="col-lg-12 p-5">
+                                                <div class="col-lg-12">
                                                     <div class="table-responsive">
-                                                        <table class="table table-striped w-100">
+                                                        <table class="table table-striped w-100" id="tableVisitorData">
                                                             <thead>
                                                                 <tr>
+                                                                    <th>Nombre</th>
+                                                                    <th>Dirección</th>
+                                                                    <th>Identificación</th>
+                                                                    <th>No. Casa</th>
+                                                                    <th>Tipo de Visita</th>
                                                                     <th>Fecha Ingreso</th>
                                                                     <th>Fecha Salida</th>
                                                                 </tr>
                                                             </thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td>2011/04/25</td>
-                                                                    <td>2011/04/25</td>
-                                                                </tr>
+                                                            <tbody id="reportVisitorTableBody">
+                                                                <!-- DATA -->
                                                             </tbody>
                                                         </table>
                                                     </div>
@@ -172,7 +176,7 @@
                                     <div class="col-12 mt-4 mb-4">
                                         <div class="row">
                                             <div class="col">
-                                                <button type="submit" class="btn btn-success w-100 py-3"><i
+                                                <button type="submit" class="btn btn-success w-100 py-3" onclick="exportEntryVisitor()"><i
                                                         class="bi bi-file-earmark-excel-fill"></i> Exportar
                                                     Excel</button>
                                             </div>
@@ -195,6 +199,10 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.2/dist/chart.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
     <script src="../../business/a/reports.js"></script>
+    <script>
+        document.getElementById('reportVisitorTable').style.display = 'none';
+        document.getElementById('reportResidentTable').style.display = 'none';
+    </script>
 </body>
 
 </html>

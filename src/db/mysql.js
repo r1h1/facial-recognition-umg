@@ -85,6 +85,35 @@ const visitorData = (table, accesscode) => {
 }
 
 
+//DEVOLVER DATOS DEL VISITANTE POR FECHAS
+const reportVisitorEntrysDates = (table, dateandhourentry, dateandhourexit) => {
+    return new Promise((resolve, reject) => {
+        stringConnection.query(`SELECT DISTINCT ${table}.id, ${table}.iduserentryandexit, ${table}.dateandhourentry, 
+        ${table}.dateandhourexit, ${table}.typeuser, vt.fullname,vt.addresstovisit,vt.cui,
+        vt.typeofvisit,vt.housenumber 
+        FROM entrys_and_exits 
+        INNER JOIN visitors vt ON ${table}.iduserentryandexit = vt.id 
+        WHERE ${table}.dateandhourentry >= '${dateandhourentry}' AND ${table}.dateandhourentry <= '${dateandhourexit}' AND ${table}.typeuser = 0;`, (error, result) => {
+            return error ? reject(error) : resolve(result);
+        });
+    });
+}
+
+
+//DEVOLVER DATOS DEL RESIDENTE POR FECHAS
+const reportResidentEntrysDates = (table, dateandhourentry, dateandhourexit) => {
+    return new Promise((resolve, reject) => {
+        stringConnection.query(`SELECT DISTINCT ${table}.id, ${table}.iduserentryandexit, ${table}.dateandhourentry, 
+        ${table}.dateandhourexit, ${table}.typeuser, us.fullname,us.address,us.housenumber
+        FROM entrys_and_exits 
+        INNER JOIN users us ON ${table}.iduserentryandexit = us.id 
+        WHERE ${table}.dateandhourentry >= '${dateandhourentry}' AND ${table}.dateandhourentry <= '${dateandhourexit}' AND ${table}.typeuser = 1;`, (error, result) => {
+            return error ? reject(error) : resolve(result);
+        });
+    });
+}
+
+
 //INSERTAR UN REGISTRO DE LA BASE DE DATOS
 const addData = (table, data) => {
     return new Promise((resolve, reject) => {
@@ -116,6 +145,8 @@ const query = (table, query) => {
 module.exports = {
     data,
     oneData,
+    reportVisitorEntrysDates,
+    reportResidentEntrysDates,
     addData,
     deleteData,
     query,

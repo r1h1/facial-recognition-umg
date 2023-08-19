@@ -40,11 +40,10 @@ CREATE TABLE auth (
     password varchar(250)
 );
 
-
 -- CREACION DE TABLA VISITANTES
 CREATE TABLE visitors (
     id INT PRIMARY KEY NOT NULL auto_increment,
-    accesscode VARCHAR(50),
+    accesscode VARCHAR(50) UNIQUE,
     fullname VARCHAR(100),
     addresstovisit VARCHAR(250),
     cui VARCHAR(50),
@@ -60,17 +59,23 @@ CREATE TABLE visitors (
     FOREIGN KEY (usergeneratedinvitation) REFERENCES users(id)
 );
 
-
 -- CREACION DE TABLA INGRESOS Y SALIDAS
 CREATE TABLE entrys_and_exits (
     id INT PRIMARY KEY NOT NULL auto_increment,
-    iduser INT,
+    iduserentryandexit INT,
     dateandhourentry VARCHAR(50),
     dateandhourexit VARCHAR(50),
     typeuser INT
-    FOREIGN KEY (iduser) REFERENCES users(id)
 );
 
+-- ROLES
+INSERT INTO
+    `rol` (`id`, `name`)
+VALUES
+    (1, 'Super Administrador'),
+    (2, 'Administrador'),
+    (3, 'Residente'),
+    (4, 'Seguridad');
 
 -- INGRESOS DE MODULOS
 INSERT INTO
@@ -161,29 +166,59 @@ VALUES
         4
     );
 
+-- USUARIO REGISTRADO
+INSERT INTO
+    `users` (
+        `id`,
+        `fullname`,
+        `address`,
+        `phonenumber`,
+        `email`,
+        `cui`,
+        `housenumber`,
+        `idrol`,
+        `status`,
+        `gender`,
+        `photo`
+    )
+VALUES
+    (1, 'Visitante', '', '', '', '', '', 4, 0, 1, '');
+
+INSERT INTO
+    `users` (
+        `id`,
+        `fullname`,
+        `address`,
+        `phonenumber`,
+        `email`,
+        `cui`,
+        `housenumber`,
+        `idrol`,
+        `status`,
+        `gender`,
+        `photo`
+    )
+VALUES
+    (
+        2,
+        'Daniel Rivas',
+        'Petapa',
+        '45024363',
+        'de.rivasherrera@gmail.com',
+        '3050000040117',
+        '7 1-52',
+        1,
+        1,
+        1,
+        ''
+    );
 
 -- AUTENTICACIÓN DE USUARIO
 INSERT INTO
     `auth` (`id`, `user`, `password`)
 VALUES
     (
-        1,
+        2,
         'de.rivasherrera@gmail.com',
         '$2b$05$AVZ/FplLC.7KKtR.s9D52uDd.nDpjPpjTMuGmVhQQsHTiTU7ztnOK'
     );
-
-
--- USUARIO REGISTRADO
-INSERT INTO `users` (`id`, `fullname`, `address`, `phonenumber`, `email`, `cui`, `housenumber`, `idrol`, `status`, `gender`, `photo`) VALUES
-(1, 'Visitante', '', '', '', '', '', 4, 0, 1, '');
-INSERT INTO `users` (`id`, `fullname`, `address`, `phonenumber`, `email`, `cui`, `housenumber`, `idrol`, `status`, `gender`, `photo`) VALUES
-(2, 'Daniel Rivas', 'Petapa', '45024363', 'de.rivasherrera@gmail.com', '3050000040117', '7 1-52', 1, 1, 1, '');
-
-
-
--- ROLES
-INSERT INTO `rol` (`id`, `name`) VALUES
-(1, 'Super Administrador'),
-(2, 'Administrador'),
-(3, 'Residente'),
-(4, 'Seguridad');

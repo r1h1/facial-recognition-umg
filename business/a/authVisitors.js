@@ -244,7 +244,7 @@ const autorizeVisitor = () => {
         else {
             if (dataObtained.status === 200 || dataObtained.status === 201 || dataObtained.status === 304) {
                 try {
-                    createVisitorEntry();
+                    createVisitorEntry(idVisitor);
                 }
                 catch (err) {
                     Swal.fire({
@@ -352,7 +352,7 @@ const denyVisitor = () => {
 }
 
 
-const createVisitorEntry = () => {
+const createVisitorEntry = (idVisitor) => {
 
     let myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -360,7 +360,7 @@ const createVisitorEntry = () => {
 
     var raw = JSON.stringify({
         "id": 0,
-        "iduser": 1,
+        "iduserentryandexit": idVisitor,
         "dateandhourentry": year + '-' + month + '-' + day,
         "dateandhourexit": '',
         "typeuser": 0
