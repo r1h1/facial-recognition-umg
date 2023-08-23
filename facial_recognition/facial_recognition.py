@@ -7,8 +7,9 @@ from mtcnn.mtcnn import MTCNN
 import database as db
 
 # CONFIG
-path = "C:/xampp/htdocs/pablo/python-reconocimiento" # your path
-txt_login = "Registrar Ingreso / Salida"
+path = "C:/xampp/htdocs/pablo/facial_recognition/" # your path
+txt_login = "Registrar Ingreso"
+txt_exit = "Registrar Salida"
 txt_register = "Agregar Fotografía Usuario"
 
 color_white = "#f4f5f4"
@@ -18,7 +19,7 @@ color_black_btn = "#202020"
 color_background = "#151515"
 
 font_label = "Century Gothic"
-size_screen = "500x300"
+size_screen = "600x400"
 
 # colors
 color_success = "\033[1;32;40m"
@@ -51,15 +52,17 @@ def configure_screen(screen, text):
 
 def credentials(screen, var, flag):
     ''' Configuration of user input '''
-    Label(screen, text="Usuario:", fg=color_white, bg=color_background, font=(font_label, 12)).pack()
+    Label(screen, text="CUI:", fg=color_white, bg=color_background, font=(font_label, 12)).pack()
     entry = Entry(screen, textvariable=var, justify=CENTER, font=(font_label, 12))
     entry.focus_force()
     entry.pack(side=TOP, ipadx=30, ipady=6)
 
     getEnter(screen)
-    if flag:
+    if flag == 1:
         Button(screen, text="Capturar rostro", fg=color_white, bg=color_black_btn, activebackground=color_background, borderwidth=0, font=(font_label, 14), height="2", width="40", command=login_capture).pack()
-    else:
+    if flag == 2:
+        Button(screen, text="Capturar rostro", fg=color_white, bg=color_black_btn, activebackground=color_background, borderwidth=0, font=(font_label, 14), height="2", width="40", command=exit_capture).pack()
+    if flag == 0:
         Button(screen, text="Capturar rostro", fg=color_white, bg=color_black_btn, activebackground=color_background, borderwidth=0, font=(font_label, 14), height="2", width="40", command=register_capture).pack()
     return entry
 
@@ -77,7 +80,7 @@ def face(img, faces):
 # REGISTER #
 def register_face_db(img):
     name_user = img.replace(".jpg","").replace(".png","")
-    res_bd = db.registerUser(path + img, name_user)
+    res_bd = db.updateUser(path + img, name_user)
 
     getEnter(screen1)
     if res_bd["updated_rows"]:
@@ -171,6 +174,7 @@ def login_capture():
             if comp >= 0.50:
                 print("{}Compatibilidad del {:.1%}{}".format(color_success, float(comp), color_normal))
                 printAndShow(screen2, f"Permiso concedido, {user_login}", 1)
+                db.insertEntry(res_db["id"])                    
             else:
                 print("{}Compatibilidad del {:.1%}{}".format(color_error, float(comp), color_normal))
                 printAndShow(screen2, "El usuario no puede acceder", 0)
@@ -181,6 +185,56 @@ def login_capture():
     else:
         printAndShow(screen2, "Usuario no encontrado", 0)
     os.remove(img)
+
+
+def exit_capture():
+    cap = cv2.VideoCapture(0)
+    user_login = user3.get()
+    img = f"{user_login}_login.jpg"
+    img_user = f"{user_login}.jpg"
+
+    while True:
+        ret, frame = cap.read()
+        cv2.imshow("Login Facial", frame)
+        if cv2.waitKey(1) == 27:
+            break
+    
+    cv2.imwrite(img, frame)
+    cap.release()
+    cv2.destroyAllWindows()
+
+    user_exit.delete(0, END)
+    
+    pixels = plt.imread(img)
+    faces = MTCNN().detect_faces(pixels)
+
+    face(img, faces)
+    getEnter(screen3)
+
+    res_db = db.getUser(user_login, path + img_user)
+    if(res_db["affected"]):
+        my_files = os.listdir()
+        if img_user in my_files:
+            face_reg = cv2.imread(img_user, 0)
+            face_log = cv2.imread(img, 0)
+
+            comp = compatibility(face_reg, face_log)
+            
+            if comp >= 0.50:
+                print("{}Compatibilidad del {:.1%}{}".format(color_success, float(comp), color_normal))
+                printAndShow(screen3, f"Permiso concedido, {user_login}", 1)
+                db.insertExit(res_db["id"])                    
+            else:
+                print("{}Compatibilidad del {:.1%}{}".format(color_error, float(comp), color_normal))
+                printAndShow(screen3, "El usuario no puede acceder", 0)
+            os.remove(img_user)
+    
+        else:
+            printAndShow(screen3, "El usuario no fue encontrado", 0)
+    else:
+        printAndShow(screen3, "Usuario no encontrado", 0)
+    os.remove(img)
+
 
 def login():
     global screen2
@@ -193,6 +247,17 @@ def login():
     configure_screen(screen2, txt_login)
     user_entry2 = credentials(screen2, user2, 1)
 
+def exit():
+    global screen3
+    global user3
+    global user_exit
+
+    screen3 = Toplevel(root)
+    user3 = StringVar()
+
+    configure_screen(screen3, txt_exit)
+    user_exit = credentials(screen3, user3, 2)
+
 root = Tk()
 root.geometry(size_screen)
 root.title("AVM")
@@ -201,6 +266,9 @@ Label(text="Reconocimiento Facial, Valles SMP", fg=color_white, bg=color_black, 
 
 getEnter(root)
 Button(text=txt_login, fg=color_white, bg=color_black_btn, activebackground=color_background, borderwidth=0, font=(font_label, 14), height="2", width="40", command=login).pack()
+
+getEnter(root)
+Button(text=txt_exit, fg=color_white, bg=color_black_btn, activebackground=color_background, borderwidth=0, font=(font_label, 14), height="2", width="40", command=exit).pack()
 
 getEnter(root)
 Button(text=txt_register, fg=color_white, bg=color_black_btn, activebackground=color_background, borderwidth=0, font=(font_label, 14), height="2", width="40", command=register).pack()
