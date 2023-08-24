@@ -5,7 +5,7 @@ import datetime
 current_date = datetime.datetime.now().date()
 formatted_date = current_date.strftime("%Y-%m-%d")
 
-with open('C:/xampp/htdocs/pablo/facial_recognition/keys.json') as json_file:
+with open('keys.json') as json_file:
     keys = json.load(json_file)
 
 def convertToBinaryData(filename):
@@ -75,14 +75,15 @@ def insertEntry(id):
 def insertExit(id):
     id3 = 0
     inserted = 0
+    noData = ''
     date = formatted_date
 
     try:
         con = db.connect(host=keys["host"], user=keys["user"], password=keys["password"], database=keys["database"]) 
         cursor = con.cursor()
-        sql = "UPDATE `entrys_and_exits` SET `dateandhourexit`= %s WHERE `id`= %s AND `typeuser` = 1 AND `datehourentry` = %s"
+        sql = "INSERT INTO `entrys_and_exits`(`id`,`iduserentryandexit`, `dateandhourentry`, `dateandhourexit`, `typeuser`) VALUES (%s, %s, %s, %s, %s)"
 
-        cursor.execute(sql,(date,id,date))
+        cursor.execute(sql,(noData,id,noData,date,1))
         con.commit()
         inserted = cursor.rowcount
         id3 = cursor.lastrowid

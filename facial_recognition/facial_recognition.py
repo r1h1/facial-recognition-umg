@@ -7,7 +7,7 @@ from mtcnn.mtcnn import MTCNN
 import database as db
 
 # CONFIG
-path = "C:/xampp/htdocs/pablo/facial_recognition/" # your path
+path = "C:/Users/PC/facial_recognition/" # your path
 txt_login = "Registrar Ingreso"
 txt_exit = "Registrar Salida"
 txt_register = "Agregar Fotografía Usuario"
@@ -18,7 +18,7 @@ color_black = "#101010"
 color_black_btn = "#202020"
 color_background = "#151515"
 
-font_label = "Century Gothic"
+font_label = "Arial"
 size_screen = "600x400"
 
 # colors
@@ -48,7 +48,7 @@ def configure_screen(screen, text):
     screen.title(text)
     screen.geometry(size_screen)
     screen.configure(bg=color_background)
-    Label(screen, text=f"¡{text}!", fg=color_white, bg=color_black, font=(font_label, 18), width="500", height="2").pack()
+    Label(screen, text=f"{text}", fg=color_white, bg=color_black, font=(font_label, 18), width="500", height="2").pack()
 
 def credentials(screen, var, flag):
     ''' Configuration of user input '''
