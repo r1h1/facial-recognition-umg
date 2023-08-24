@@ -5,7 +5,7 @@ import datetime
 current_date = datetime.datetime.now().date()
 formatted_date = current_date.strftime("%Y-%m-%d")
 
-with open('keys.json') as json_file:
+with open('C:/Users/PC/facial_recognition/keys.json') as json_file:
     keys = json.load(json_file)
 
 def convertToBinaryData(filename):
