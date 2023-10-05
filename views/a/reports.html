@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../../assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css" />
+    <link rel="stylesheet" href="../../assets/css/style.css" />
+    <link rel="icon" href="../../assets/img/logo.png">
+
+    <!-- SweetAlert2 Library -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- SHEET JS FOR IMPORT DATA TO EXCEL -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
+
+    <title>Valles de San Miguel Petapa</title>
+</head>
+
+<body>
+    <!-- top navigation bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar"
+                aria-controls="offcanvasExample">
+                <span class="navbar-toggler-icon" data-bs-target="#sidebar"></span>
+            </button>
+            <a class="navbar-brand me-auto ms-lg-0 ms-3 text-uppercase fw-bold">Control Valles SMP</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topNavBar"
+                aria-controls="topNavBar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="topNavBar">
+                <form class="d-flex ms-auto my-3 my-lg-0">
+                    <!-- NOTHING -->
+                </form>
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle ms-2" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <i class="bi bi-person-fill"></i><span class="ms-3" id="userNameDisplay">{user}</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li onclick="closeSession()">
+                                <a class="dropdown-item">Cerrar Sesión</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- top navigation bar -->
+    <!-- offcanvas -->
+    <div class="offcanvas offcanvas-start sidebar-nav bg-dark" tabindex="-1" id="sidebar">
+        <div class="offcanvas-body p-0">
+            <nav class="navbar-dark">
+                <ul class="navbar-nav">
+                    <li class="mt-5">
+                        <div class="text-muted small fw-bold text-uppercase px-3 mb-3">
+                            Menú de Opciones
+                        </div>
+                    </li>
+                    <li class="my-2">
+                        <hr class="dropdown-divider bg-light" />
+                    </li>
+                    <div id="menu-list">
+                        <!-- MENU -->
+                    </div>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <!-- offcanvas -->
+    <main class="mt-5 pt-3">
+        <div class="container-fluid p-5">
+            <div class="row">
+                <div class="col-md-12">
+                    <h4>Reportes</h4>
+                    <p>Ingresa una fecha de inicio y una fecha final para ver los datos</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 mb-3">
+                    <div class="card bg-light h-100">
+                        <div class="card-body py-5">
+                            <div class="row">
+                                <div class="col-lg-12">
+
+                                    <input type="text" id="dataCompleteReport" hidden>
+
+                                    <form class="row g-3">
+                                        <div class="col-md-4">
+                                            <label for="inputEmail4" class="form-label">Fecha Inicio *</label>
+                                            <input type="date" class="form-control" id="dateEntry">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="inputEmail4" class="form-label">Fecha Fin *</label>
+                                            <input type="date" class="form-control" id="dateExit">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="inputState" class="form-label">Tipo de Reporte *</label>
+                                            <select id="typeReport" class="form-select" onchange="typeReportFilter()">
+                                                <option value="" selected>Selecciona uno...</option>
+                                                <option value="1">Ingreso y salida residentes</option>
+                                                <option value="0">Ingreso y salida visita</option>
+                                            </select>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="col-lg-12 mt-5 w-100" id="reportResidentTable">
+                                    <div class="card rounded rounded-5">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-striped w-100" id="tableResidentData">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Nombre</th>
+                                                                    <th>Dirección</th>
+                                                                    <th>No. Casa</th>
+                                                                    <th>Fecha Ingreso</th>
+                                                                    <th>Fecha Salida</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="reportResidentTableBody">
+                                                                <!-- DATA -->
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 mt-4 mb-4">
+                                        <div class="row">
+                                            <div class="col">
+                                                <button type="submit" class="btn btn-success w-100 py-3" onclick="exportEntryResident()"><i
+                                                        class="bi bi-file-earmark-excel-fill"></i> Exportar
+                                                    Excel</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 mt-5 w-100" id="reportVisitorTable">
+                                    <div class="card rounded rounded-5">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-striped w-100" id="tableVisitorData">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Nombre</th>
+                                                                    <th>Dirección</th>
+                                                                    <th>Identificación</th>
+                                                                    <th>No. Casa</th>
+                                                                    <th>Tipo de Visita</th>
+                                                                    <th>Fecha Ingreso</th>
+                                                                    <th>Fecha Salida</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="reportVisitorTableBody">
+                                                                <!-- DATA -->
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 mt-4 mb-4">
+                                        <div class="row">
+                                            <div class="col">
+                                                <button type="submit" class="btn btn-success w-100 py-3" onclick="exportEntryVisitor()"><i
+                                                        class="bi bi-file-earmark-excel-fill"></i> Exportar
+                                                    Excel</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row text-center">
+                <div class="col-md-12 mt-5">
+                    <p>&copy; Universidad Mariano Gálvez de Guatemala, Pablo Andrés López Paz, 2023</p>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="../../assets/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.2/dist/chart.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="../../business/a/reports.js"></script>
+    <script>
+        document.getElementById('reportVisitorTable').style.display = 'none';
+        document.getElementById('reportResidentTable').style.display = 'none';
+    </script>
+</body>
+
+</html>
