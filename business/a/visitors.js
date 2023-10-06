@@ -130,7 +130,6 @@ const getVisitors = () => {
         redirect: 'follow'
     };
 
-<<<<<<< HEAD
     if (userInformation[0].idrol != 1 || userInformation[0].idrol != 2) {
         fetch(apiRouteVisitorsFilterWithResidentId + userInformation[0].id, requestOptions)
             .then(response => response.json())
@@ -143,12 +142,6 @@ const getVisitors = () => {
             .then(dataObtained => showData(dataObtained))
             .catch(error => console.log('Error: ' + error))
     }
-=======
-    fetch(apiRouteVisitors, requestOptions)
-        .then(response => response.json())
-        .then(dataObtained => showData(dataObtained))
-        .catch(error => console.log('Error: ' + error))
->>>>>>> 95eeadd0ebf5b7e003cd9113fc8706f7e5e66f45
 
     const showData = (dataObtained) => {
         try {
@@ -179,7 +172,6 @@ const addDataToVisitorTable = (dataObtained) => {
     }
     else {
         for (let i = 0; i < dataObtained.body.length; i++) {
-<<<<<<< HEAD
             dataSet.push([
                 dataObtained.body[i].accesscode ?? 'Sin Datos',
                 dataObtained.body[i].fullname ?? 'Sin Datos',
@@ -196,29 +188,6 @@ const addDataToVisitorTable = (dataObtained) => {
                 dataObtained.body[i].authorization === 1 ? 'Acceso Concedido' : dataObtained.body[i].authorization === 2 ? 'Pendiente o Vencido' : 'Acceso Denegado' ?? 'Sin Datos',
                 `<button class="btn btn-danger" onclick="deleteVisitor(${dataObtained.body[i].id})"><i class="bi bi-trash-fill"></i></button>`
             ]);
-=======
-            if (userInformation[0].idrol === 3 || userInformation[0].idrol === 4) {
-                document.getElementById('visitorTableDisplay').style.display = 'none';
-            }
-            if (userInformation[0].idrol === 1 || userInformation[0].idrol === 2) {
-                dataSet.push([
-                    dataObtained.body[i].accesscode ?? 'Sin Datos',
-                    dataObtained.body[i].fullname ?? 'Sin Datos',
-                    dataObtained.body[i].addresstovisit ?? 'Sin Datos',
-                    dataObtained.body[i].cui ?? 'Sin Datos',
-                    dataObtained.body[i].gender === 1 ? 'Hombre' : 'Mujer' ?? 'Sin Datos',
-                    dataObtained.body[i].typeofvisit ?? 'Sin Datos',
-                    dataObtained.body[i].housenumber ?? 'Sin Datos',
-                    `<img src="${dataObtained.body[i].visitorphoto}" alt="visitor-photo-face" width="120"/>`,
-                    `<img src="${dataObtained.body[i].personalidentificationphoto}" alt="visitor-photo-identification" width="120"/>`,
-                    dataObtained.body[i].createddate ?? 'Sin Datos',
-                    dataObtained.body[i].expireddate ?? 'Sin Datos',
-                    dataObtained.body[i].usergeneratedinvitation ?? 'Sin Datos',
-                    dataObtained.body[i].authorization === 1 ? 'Acceso Concedido' : dataObtained.body[i].authorization === 2 ? 'Pendiente o Vencido' : 'Acceso Denegado' ?? 'Sin Datos',
-                    `<button class="btn btn-danger" onclick="deleteVisitor(${dataObtained.body[i].id})"><i class="bi bi-trash-fill"></i></button>`
-                ]);
-            }
->>>>>>> 95eeadd0ebf5b7e003cd9113fc8706f7e5e66f45
         }
     }
 
@@ -347,11 +316,7 @@ const createVisitors = () => {
     let entryTypeVisitor = document.getElementById('entryTypeVisitor').value;
 
     if (nameVisitor === '' || addressVisitor === '' || cuiVisitor === '' || houseNumberVisitor === ''
-<<<<<<< HEAD
         || photoIdVisitor === '' || genderVisitor === '' ||
-=======
-        || photoFaceVisitor === '' || photoIdVisitor === '' || genderVisitor === '' ||
->>>>>>> 95eeadd0ebf5b7e003cd9113fc8706f7e5e66f45
         entryTypeVisitor === '') {
         Swal.fire({
             icon: 'warning',
@@ -459,7 +424,6 @@ const createVisitors = () => {
 const saveFacePhoto = (insertId) => {
 
     let photoFaceVisitor = document.getElementById('photoFaceBase64').value;
-<<<<<<< HEAD
 
     if (photoFaceVisitor === '' || photoFaceVisitor === null) {
         photoFaceVisitor = '';
@@ -468,8 +432,6 @@ const saveFacePhoto = (insertId) => {
         photoFaceVisitor = photoFaceVisitor;
     }
 
-=======
->>>>>>> 95eeadd0ebf5b7e003cd9113fc8706f7e5e66f45
     let myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     myHeaders.append("Authorization", "Bearer " + sessionStorage.getItem('signInToken'));
